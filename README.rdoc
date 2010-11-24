@@ -1,6 +1,6 @@
 = quark
 
-**Quark** encapsulates the Friendster v1 API for **Project Neutron**.
+*Quark* encapsulates the Friendster v1 API for Project Neutron.
 
 == Copyright
 
