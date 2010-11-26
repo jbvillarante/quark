@@ -1,7 +1,7 @@
 require 'helper'
 
-class TestQuark < Test::Unit::TestCase
-  should "probably rename this file and start testing for real" do
-    flunk "hey buddy, you should probably rename this file and start testing for real"
+describe 'quark' do
+  specify 'should flunk because no tests have been written' do
+    flunk 'write ze tests'
   end
 end
