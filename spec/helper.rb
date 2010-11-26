@@ -8,6 +8,9 @@ rescue Bundler::BundlerError => e
 end
 
 require 'rspec'
+RSpec.configure do |config|
+  config.before(:each) { Typhoeus::Hydra.hydra.clear_stubs }
+end
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
