@@ -1,6 +1,7 @@
 source "http://rubygems.org"
 # Add dependencies required to use your gem here.
 # Example:
+gem "nokogiri", ">= 1.4.3"
 gem "typhoeus", ">= 0.2.0"
 
 # Add dependencies to develop your gem here.
