@@ -1,6 +1,6 @@
 require 'helper'
 
-describe 'Quark::Session' do
+describe 'Quark::Client' do
   before :each do
     @api_key = '718fb34497589503915e85470d9d5511'
     @api_secret = 'b39c091ea8bb895345f652cc3217a1cf'
@@ -14,32 +14,21 @@ describe 'Quark::Session' do
   end
 
   specify 'should require setting the API key' do
-    lambda { Quark::Session.new(:api_secret => @api_secret) }.should raise_error
+    lambda { Quark::Client.new(:api_secret => @api_secret) }.should raise_error
   end
 
   specify 'should require setting the API secret' do
-    lambda { Quark::Session.new(:api_key => @api_key) }.should raise_error
+    lambda { Quark::Client.new(:api_key => @api_key) }.should raise_error
   end
 
   specify 'should allow setting the API endpoint' do
     endpoint = 'http://localhost/v1'
-    session = Quark::Session.new(:api_key => @api_key, :api_secret => @api_secret, :endpoint => endpoint)
+    session = Quark::Client.new(:api_key => @api_key, :api_secret => @api_secret, :endpoint => endpoint)
     session.endpoint.should == endpoint
   end
 
   specify "should default to Friendster's v1 API endpoint" do
-    session = Quark::Session.new(:api_key => @api_key, :api_secret => @api_secret)
+    session = Quark::Client.new(:api_key => @api_key, :api_secret => @api_secret)
     session.endpoint.should == @default_endpoint
-  end
-
-  specify 'should succeed given a valid API key' do
-    lambda {
-      session = Quark::Session.new(:api_key => @api_key, :api_secret => '')
-      session.session_key.should_not be_nil
-    }.should_not raise_error
-  end
-
-  specify 'should raise an error given an invalid API key' do
-    lambda { Quark::Session.new(:api_key => '', :api_secret => @api_secret) }.should raise_error
   end
 end
