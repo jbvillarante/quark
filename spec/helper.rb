@@ -18,3 +18,8 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'quark'
+
+def xml_test_data(name)
+  path = File.join(File.dirname(__FILE__), 'data', "#{name}.xml")
+  File.open(path, 'r') { |handle| handle.read }
+end
