@@ -2,6 +2,48 @@
 
 *Quark* encapsulates the Friendster v1 API for Project Neutron.
 
+== Usage
+
+=== Obtaining a Token
+
+This is the first step to creating a valid API session, unless your app is
+being invoked on the canvas page.
+
+  client = Quark::Client.new(:api_key => your_api_key, :api_secret => your_api_secret)
+  token = client.get_token
+
+=== Establishing a Session
+
+There are three ways to obtain a valid session key:
+
+1. *Using an Authenticated Token*
+
+You must authenticate tokens obtained from the +token+ API call before using
+them to create a session.  To do this, redirect the user to Friendster's widget
+login page:
+
+  http://www.friendster.com/widget_login.php?api_key=your_api_key&auth_token=your_token
+
+Once the user logs in, Friendster authenticates the token, binds it to the
+logged in user ID, and redirects back to your application's callback URL.  You
+can now use the token to obtain a session:
+
+  session = client.create_session_from_token(your_token)
+
+2. *Using the +login+ API*
+
+Trusted applications can invoke the +login+ API with valid user credentials and
+token.  _This method is not yet implemented in +Quark::Client+._
+
+3. *Canvas Page*
+
+Applications displayed on their canvas page automatically receive a valid
+session key and the associated user ID as parameters.
+
+  session = client.create_session(:session_key => session_key, :uid => uid)
+
+=== Invoking API Calls
+
 == Copyright
 
 Copyright (c) 2010 Friendster, Inc.
