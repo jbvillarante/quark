@@ -16,7 +16,7 @@ being invoked on the canvas page.
 
 There are three ways to obtain a valid session key:
 
-1. *Using an Authenticated Token*
+==== Using an Authenticated Token
 
 You must authenticate tokens obtained from the +token+ API call before using
 them to create a session.  To do this, redirect the user to Friendster's widget
@@ -30,12 +30,12 @@ can now use the token to obtain a session:
 
   session = client.create_session_from_token(your_token)
 
-2. *Using the +login+ API*
+==== Using the +login+ API
 
 Trusted applications can invoke the +login+ API with valid user credentials and
-token.  _This method is not yet implemented in +Quark::Client+._
+token.  __This method is not yet implemented in +Quark::Client+.__
 
-3. *Canvas Page*
+==== Canvas Page
 
 Applications displayed on their canvas page automatically receive a valid
 session key and the associated user ID as parameters.
