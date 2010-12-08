@@ -58,6 +58,53 @@ describe 'Quark::Session' do
       client.endpoint.should == @default_endpoint
     end
   end
+  
+  describe 'User Photos' do
+  
+    before :each do 
+      @arguments = {
+        :api_key => @api_key,
+        :api_secret => @api_secret,
+        :session_key => 'Peni5ks8UkrpLayjuhpXy53EoiyCZ0zG-43169473',
+        :uid => '43169473',
+        :nonce => Time.now.to_f.to_s
+      }
+    end
+    
+    specify "should retrieve the list of his own albums" do
+      stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => xml_test_data('albums_response_valid'))
+      Typhoeus::Hydra.hydra.stub(:get, %r{/albums}).and_return(stub_response)
+      session = Quark::Session.new(@arguments)
+      albums = session.albums
+      albums.should_not be_empty
+      albums.each{|album| album.css('owner').text.should == session.uid}
+    end
+    
+    specify "should retrieve the list of photos in a specific album" do
+      stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => xml_test_data('photos_response_valid'))
+      Typhoeus::Hydra.hydra.stub(:get, %r{/photos}).and_return(stub_response)
+      session = Quark::Session.new(@arguments)
+      album_id = '709277604'
+      photos = session.photos(album_id)
+      photos.should_not be_empty
+      photos.each do |photo| 
+        photo.css('owner').text.should == session.uid
+        photo.css('aid').text.should == album_id
+      end
+    end
+    
+    specify "should retrieve a photo" do
+      stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => xml_test_data('photo_response_valid'))
+      Typhoeus::Hydra.hydra.stub(:get, %r{/photo\/\d*}).and_return(stub_response)
+      session = Quark::Session.new(@arguments)
+      photo_id = '12864816732'
+      photo = session.photo(photo_id)
+      photo.should_not be_empty
+      photo.size.should == 1
+      photo.css('owner').text.should == session.uid
+      photo.css('pid').text.should == photo_id
+    end
+  end
 
 end
 

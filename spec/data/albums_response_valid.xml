@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?><albums_response  xmlns="http://api.friendster.com/v1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://api.friendster.com/v1/ http://api.friendster.com/v1/friendster.xsd"  list="true"><album>
+<aid>709277604</aid>
+<cover_pid>12902120824</cover_pid>
+<owner>43169473</owner>
+<name><![CDATA[Eklavu]]></name>
+<created>1250590404</created>
+<modified>1260846943</modified>
+<description><![CDATA[Ekla!]]></description>
+<isprivate>0</isprivate>
+<link><![CDATA[http://www.friendster.com/viewphotos.php?a=709277604&uid=43169473]]></link>
+<size>4</size>
+</album>
+</albums_response>

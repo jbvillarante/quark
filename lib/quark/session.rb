@@ -24,5 +24,22 @@ module Quark
     def uid
       return @settings[:uid]
     end
+
+    def albums
+      response = Quark::SignedRequest.get(endpoint, 'albums', @settings[:api_secret], :params => @settings)
+      Nokogiri::XML(response.body).css('album')
+    end
+    
+    def photos(album_id)
+      params = @settings.merge(:aid => album_id)
+      response = Quark::SignedRequest.get(endpoint, 'photos', @settings[:api_secret], :params => params)
+      Nokogiri::XML(response.body).css('photo')
+    end
+    
+    def photo(photo_id)
+      params = @settings.merge(:pid => photo_id)
+      response = Quark::SignedRequest.get(endpoint, "photo/#{photo_id}", @settings[:api_secret], :params => params)
+      Nokogiri::XML(response.body).css('photo')
+    end
   end
 end
