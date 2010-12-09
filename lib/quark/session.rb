@@ -8,7 +8,6 @@ module Quark
         :api_key => nil,
         :api_secret => nil,
         :session_key => nil,
-        :format => 'json'
       }.merge(params)
 
       [ :api_key, :api_secret, :session_key, :uid ].each do |required|
@@ -29,26 +28,28 @@ module Quark
     end
 
     def albums
-      params = @settings.merge(:nonce => timestamp)
-      response = Quark::SignedRequest.get(endpoint, 'albums', @settings[:api_secret], :params => params)
+      response = Quark::SignedRequest.get(endpoint, 'albums', @settings[:api_secret], :params => build_params)
       JSON.parse(response.body)['album']
     end
     
     def photos(album_id)
-      params = @settings.merge(:aid => album_id, :nonce => timestamp)
-      response = Quark::SignedRequest.get(endpoint, 'photos', @settings[:api_secret], :params => params)
+      response = Quark::SignedRequest.get(endpoint, 'photos', @settings[:api_secret], :params => build_params(:aid => album_id))
       JSON.parse(response.body)['photo']
     end
     
     def photo(photo_id)
-      params = @settings.merge(:pid => photo_id, :nonce => timestamp)
-      response = Quark::SignedRequest.get(endpoint, "photo/#{photo_id}", @settings[:api_secret], :params => params)
+      response = Quark::SignedRequest.get(endpoint, "photo/#{photo_id}", @settings[:api_secret], :params => build_params)
       JSON.parse(response.body)['photo']
     end
     
     private
-    def timestamp
-      Time.now.to_f.to_s
+    def build_params(options = {})
+      params = {
+        :api_key => @settings[:api_key],
+        :session_key => session_key,
+        :nonce => "#{Time.now.to_f}", 
+        :format => 'json'
+      }.merge(options)
     end
   end
 end
