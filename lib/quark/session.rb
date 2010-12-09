@@ -29,20 +29,26 @@ module Quark
     end
 
     def albums
-      response = Quark::SignedRequest.get(endpoint, 'albums', @settings[:api_secret], :params => @settings)
+      params = @settings.merge(:nonce => timestamp)
+      response = Quark::SignedRequest.get(endpoint, 'albums', @settings[:api_secret], :params => params)
       JSON.parse(response.body)['album']
     end
     
     def photos(album_id)
-      params = @settings.merge(:aid => album_id)
+      params = @settings.merge(:aid => album_id, :nonce => timestamp)
       response = Quark::SignedRequest.get(endpoint, 'photos', @settings[:api_secret], :params => params)
       JSON.parse(response.body)['photo']
     end
     
     def photo(photo_id)
-      params = @settings.merge(:pid => photo_id)
+      params = @settings.merge(:pid => photo_id, :nonce => timestamp)
       response = Quark::SignedRequest.get(endpoint, "photo/#{photo_id}", @settings[:api_secret], :params => params)
       JSON.parse(response.body)['photo']
+    end
+    
+    private
+    def timestamp
+      Time.now.to_f.to_s
     end
   end
 end

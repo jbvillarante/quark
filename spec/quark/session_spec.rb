@@ -66,8 +66,7 @@ describe 'Quark::Session' do
         :api_key => @api_key,
         :api_secret => @api_secret,
         :session_key => 'Peni5ks8UkrpLayjuhpXy53EoiyCZ0zG-43169473',
-        :uid => '43169473',
-        :nonce => Time.now.to_f.to_s
+        :uid => '43169473'
       }
     end
     
