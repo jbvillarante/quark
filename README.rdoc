@@ -44,6 +44,23 @@ session key and the associated user ID as parameters.
 
 === Invoking API Calls
 
+==== User Albums
+Retrieves the album list of the current user.
+
+  session.albums # returns an array
+  
+==== User Photos
+
+Retrieves the photo list given a specific album id.
+  
+  session.photos(album_id = 1234) # returns an array
+  
+==== User Photo
+
+Retrieves the photo details given a specific photo id
+
+  session.photo(photo_id = 1234) # returns a hash
+
 == Copyright
 
 Copyright (c) 2010 Friendster, Inc.
