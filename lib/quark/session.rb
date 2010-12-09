@@ -1,3 +1,5 @@
+require 'json'
+
 module Quark
   class Session
     def initialize(params)
@@ -5,7 +7,8 @@ module Quark
         :endpoint => 'http://api.friendster.com/v1',
         :api_key => nil,
         :api_secret => nil,
-        :session_key => nil
+        :session_key => nil,
+        :format => 'json'
       }.merge(params)
 
       [ :api_key, :api_secret, :session_key, :uid ].each do |required|
@@ -27,19 +30,19 @@ module Quark
 
     def albums
       response = Quark::SignedRequest.get(endpoint, 'albums', @settings[:api_secret], :params => @settings)
-      Nokogiri::XML(response.body).css('album')
+      JSON.parse(response.body)['album']
     end
     
     def photos(album_id)
       params = @settings.merge(:aid => album_id)
       response = Quark::SignedRequest.get(endpoint, 'photos', @settings[:api_secret], :params => params)
-      Nokogiri::XML(response.body).css('photo')
+      JSON.parse(response.body)['photo']
     end
     
     def photo(photo_id)
       params = @settings.merge(:pid => photo_id)
       response = Quark::SignedRequest.get(endpoint, "photo/#{photo_id}", @settings[:api_secret], :params => params)
-      Nokogiri::XML(response.body).css('photo')
+      JSON.parse(response.body)['photo']
     end
   end
 end

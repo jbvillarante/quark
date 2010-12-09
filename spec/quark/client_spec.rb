@@ -27,7 +27,7 @@ describe 'Quark::Client' do
   end
 
   specify 'should be able to obtain an auth_token' do
-    stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => xml_test_data('token_response_valid'))
+    stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('token_response_valid.xml'))
     Typhoeus::Hydra.hydra.stub(:post, %r{/token}).and_return(stub_response)
 
     client = Quark::Client.new(:api_key => @api_key, :api_secret => @api_secret)
@@ -48,7 +48,7 @@ describe 'Quark::Client' do
   end
 
   specify 'can obtain a session key and UID from an authenticated auth_token' do
-    stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => xml_test_data('session_response_valid'))
+    stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('session_response_valid.xml'))
     Typhoeus::Hydra.hydra.stub(:post, %r{/session}).and_return(stub_response)
     client = Quark::Client.new(:api_key => @api_key, :api_secret => @api_secret)
     session = client.create_session_from_token(@auth_token)
