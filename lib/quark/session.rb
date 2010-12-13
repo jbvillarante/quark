@@ -39,6 +39,16 @@ module Quark
       JSON.parse(response.body)['photo']
     end
     
+    def primary_photo
+      response = Quark::SignedRequest.get(endpoint, "primaryphoto/#{uid}", @settings[:api_secret], :params => build_params)
+      JSON.parse(response.body)['photo']
+    end
+    
+    def user
+      response = Quark::SignedRequest.get(endpoint, 'user', @settings[:api_secret], :params => build_params)
+      JSON.parse(response.body)['user']
+    end
+    
     private
     def build_params(options = {})
       params = {

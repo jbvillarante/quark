@@ -59,7 +59,7 @@ describe 'Quark::Session' do
     end
   end
   
-  describe 'User Photos' do
+  describe 'User API Calls' do
   
     before :each do 
       @arguments = {
@@ -76,7 +76,12 @@ describe 'Quark::Session' do
       session = Quark::Session.new(@arguments)
       albums = session.albums
       albums.should_not be_empty
-      albums.each{|album| album['owner'].should == session.uid}
+      albums.each do |album| 
+        album['owner'].should == session.uid
+        %w{aid cover_pid owner name created modified description isprivate link size}.each {|key|
+          album.has_key?(key).should be_true
+        }
+      end
     end
     
     specify "should retrieve the list of photos in a specific album" do
@@ -101,6 +106,54 @@ describe 'Quark::Session' do
       photo.should_not be_empty
       photo['owner'].should == session.uid
       photo['pid'].should == photo_id
+      %w{aid src src_small src_big link caption created is_grabbed}.each {|key|
+        photo.has_key?(key).should be_true
+      }
+    end
+    
+    specify "should retrieve primary photo" do
+      stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('primary_photo_response_valid.json'))
+      Typhoeus::Hydra.hydra.stub(:get, %r{/primaryphoto}).and_return(stub_response)
+      session = Quark::Session.new(@arguments)
+      primary_photo = session.primary_photo
+      primary_photo.should_not be_empty
+      primary_photo['owner'].should == session.uid
+      %w{pid aid src src_small src_big link caption created is_grabbed}.each {|key|
+        primary_photo.has_key?(key).should be_true
+      }
+    end
+    
+    specify "should retrieve his user information" do
+      stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('user_response_valid.json'))
+      Typhoeus::Hydra.hydra.stub(:get, %r{/primaryphoto}).and_return(stub_response)
+      session = Quark::Session.new(@arguments)
+      user_info = session.user
+      user_info.should_not be_empty
+      user_info['uid'].should == session.uid
+      [ "first_name",
+        "last_name",
+        "url",
+        "primary_photo_url",
+        "location",
+        "hometown", 
+        "user_type", 
+        "fan_profile_type",
+        "fan_profile_category",
+        "relationship_status",
+        "gender",
+        "member_since",
+        "interested_in",
+        "occupation",
+        "companies",
+        "hobbies_and_interests",
+        "affiliations",
+        "college_list",
+        "school_list",
+        "school_other",
+        "favorites",
+        "about_me",
+        "want_to_meet", 
+        "birthday"].each {|key| user_info.has_key?(key).should be_true }
     end
   end
 
