@@ -32,8 +32,9 @@ can now use the token to obtain a session:
 
 ==== Using the +login+ API
 
-Trusted applications can invoke the +login+ API with valid user credentials and
-token.  __This method is not yet implemented in +Quark::Client+.__
+Trusted applications can invoke the +login+ API with valid user credentials.
+
+  session = client.login(user_email, user_password)
 
 ==== Canvas Page
 
@@ -48,18 +49,106 @@ session key and the associated user ID as parameters.
 Retrieves the album list of the current user.
 
   session.albums # returns an array
+  => [{"aid"=>"11111",  
+  "cover_pid"=>"22222", 
+  "owner"=>"33333", 
+  "name"=>"Sample Album", 
+  "created"=>1250590404, 
+  "modified"=>1260846943, 
+  "description"=>"sample", 
+  "isprivate"=>"0", 
+  "link"=>"http://www.friendster.com/viewphotos.php?a=11111&uid=33333", 
+  "size"=>"4"}
+  ]
   
 ==== User Photos
 
 Retrieves the photo list given a specific album id.
   
   session.photos(album_id = 1234) # returns an array
+  => [{"pid"=>"11111", 
+  "aid"=>"22222", 
+  "owner"=>"33333", 
+  "src"=>"http://photos.friendster.com/photos/11/22/33333/12345678m.jpg", 
+  "src_small"=>"http://photos.friendster.com/photos/11/22/33333/12345678s.jpg", 
+  "src_big"=>"http://photos.friendster.com/photos/11/22/33333/12345678l.jpg", 
+  "link"=>"http://photos.friendster.com/photos/11/22/33333/12345678", 
+  "caption"=>"", 
+  "created"=>1272252629, 
+  "is_grabbed"=>"0"},
+  {"pid"=>"11112", 
+  "aid"=>"22222", 
+  "owner"=>"33333", 
+  "src"=>"http://photos.friendster.com/photos/11/22/33333/123456789m.jpg", 
+  "src_small"=>"http://photos.friendster.com/photos/11/22/33333/123456789s.jpg", 
+  "src_big"=>"http://photos.friendster.com/photos/11/22/33333/123456789l.jpg", 
+  "link"=>"http://photos.friendster.com/photos/11/22/33333/123456789", 
+  "caption"=>"", 
+  "created"=>1272252630, 
+  "is_grabbed"=>"0"},
+  ]
   
 ==== User Photo
 
 Retrieves the photo details given a specific photo id
 
-  session.photo(photo_id = 1234) # returns a hash
+  session.photo(photo_id = 11111) # returns a hash
+  => {"pid"=>"11111", 
+  "aid"=>"22222", 
+  "owner"=>"33333", 
+  "src"=>"http://photos.friendster.com/photos/11/22/33333/12345678m.jpg", 
+  "src_small"=>"http://photos.friendster.com/photos/11/22/33333/12345678s.jpg", 
+  "src_big"=>"http://photos.friendster.com/photos/11/22/33333/12345678l.jpg", 
+  "link"=>"http://photos.friendster.com/photos/11/22/33333/12345678", 
+  "caption"=>"", 
+  "created"=>1272252629, 
+  "is_grabbed"=>"0"}
+  
+==== User Primary Photo
+
+Retrieves the primary photo of the current user.
+
+  session.primary_photo # returns a hash
+  => {"pid"=>"11111", 
+  "aid"=>"22222", 
+  "owner"=>"33333", 
+  "src"=>"http://photos.friendster.com/photos/11/22/33333/12345678m.jpg", 
+  "src_small"=>"http://photos.friendster.com/photos/11/22/33333/12345678s.jpg", 
+  "src_big"=>"http://photos.friendster.com/photos/11/22/33333/12345678l.jpg", 
+  "link"=>"http://photos.friendster.com/photos/11/22/33333/12345678", 
+  "caption"=>"", 
+  "created"=>1272252629, 
+  "is_grabbed"=>"0"}
+  
+==== User Information
+
+Retrieves the user information of the current user.
+
+  session.user # returns a hash
+  => {"uid"=>"22222", 
+  "first_name"=>"Sample", "last_name"=>"API", 
+  "url"=>"http://profiles.friendster.com/22222", 
+  "primary_photo_url"=>"http://photos.friendster.com/photos/11/22/33333/12345678m.jpg", 
+  "location"=>{"country"=>"Philippines", "state"=>"Metro Manila", "city"=>"Makati", "zip"=>"1212"}, 
+  "hometown"=>"", 
+  "user_type"=>"Normal", 
+  "fan_profile_type"=>"None", 
+  "fan_profile_category"=>"None", 
+  "relationship_status"=>"It's Complicated TM", 
+  "gender"=>"Male", 
+  "member_since"=>{"year"=>"2007", "month"=>"05"}, 
+  "interested_in"=>{"interest"=>["Friends"]}, 
+  "occupation"=>"", 
+  "companies"=>nil, 
+  "hobbies_and_interests"=>nil, 
+  "affiliations"=>nil, 
+  "college_list"=>[], 
+  "school_list"=>[], 
+  "school_other"=>nil, 
+  "favorites"=>{"books"=>nil, "movies"=>nil, "music"=>nil, "tv_shows"=>nil}, 
+  "about_me"=>"", 
+  "want_to_meet"=>"", 
+  "birthday"=>{"year"=>"1970", "month"=>"01", "day"=>"01"}}
 
 == Copyright
 

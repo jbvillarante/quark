@@ -35,7 +35,17 @@ describe 'Quark::Client' do
   end
 
   specify 'can log in with a user email and password using a trusted API key' do
-    pending 'unimplemented'
+    stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('login_response_valid.xml'))
+    Typhoeus::Hydra.hydra.stub(:post, %r{/login}).and_return(stub_response)
+    
+    uid = '43169473'
+    email = 'fake@gmail.com'
+    password = 'fake'
+    
+    client = Quark::Client.new(:api_key => @api_key, :api_secret => @api_secret)
+    session = client.login(email, password)
+    session.session_key.should == 'Peni5ks8UkrpLayjuhpXy53EoiyCZ0zG-43169473'
+    session.uid.should == uid
   end
 
   specify 'can accept a session key and UID directly' do
@@ -55,4 +65,5 @@ describe 'Quark::Client' do
     session.session_key.should == 'Peni5ks8UkrpLayjuhpXy53EoiyCZ0zG-43169473'
     session.uid.should == '43169473'
   end
+  
 end
