@@ -13,44 +13,49 @@ module Quark
     end
 
     def endpoint
-      return @settings[:endpoint]
+      @settings[:endpoint]
     end
 
     def session_key
-      return @settings[:session_key]
+      @settings[:session_key]
     end
 
     def uid
-      return @settings[:uid]
+      @settings[:uid]
     end
 
     def albums
-      response = Quark::SignedRequest.get(endpoint, 'albums', @settings[:api_secret], :params => build_params)
+      response = get(:resource => 'albums')
       JSON.parse(response.body)['album']
     end
     
     def photos(album_id)
-      response = Quark::SignedRequest.get(endpoint, 'photos', @settings[:api_secret], :params => build_params(:aid => album_id))
+      response = get(:resource => 'photos', :params => {:aid => album_id} )
       JSON.parse(response.body)['photo']
     end
     
     def photo(photo_id)
-      response = Quark::SignedRequest.get(endpoint, "photo/#{photo_id}", @settings[:api_secret], :params => build_params)
+      response = get(:resource => "photo/#{photo_id}")
       JSON.parse(response.body)['photo']
     end
     
     def primary_photo
-      response = Quark::SignedRequest.get(endpoint, "primaryphoto/#{uid}", @settings[:api_secret], :params => build_params)
+      response = get(:resource => "primaryphoto/#{uid}")
       JSON.parse(response.body)['photo']
     end
     
     def user
-      response = Quark::SignedRequest.get(endpoint, 'user', @settings[:api_secret], :params => build_params)
+      response = get(:resource => 'user')
       JSON.parse(response.body)['user']
+    end
+      
+    def get(data)
+      Quark::SignedRequest.get(endpoint, data[:resource], @settings[:api_secret], :params => build_params(data[:params]))
     end
     
     private
-    def build_params(options = {})
+    def build_params(options)
+      options ||= {}
       params = {
         :api_key => @settings[:api_key],
         :session_key => session_key,

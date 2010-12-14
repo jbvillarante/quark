@@ -43,7 +43,7 @@ session key and the associated user ID as parameters.
 
   session = client.create_session(:session_key => session_key, :uid => uid)
 
-=== Invoking API Calls
+=== Invoking Convenience API Calls
 
 ==== User Albums
 Retrieves the album list of the current user.
@@ -149,6 +149,28 @@ Retrieves the user information of the current user.
   "about_me"=>"", 
   "want_to_meet"=>"", 
   "birthday"=>{"year"=>"1970", "month"=>"01", "day"=>"01"}}
+
+=== Invoking Direct API Calls
+
+You can call APIs directly and access the raw response by specifying the +resource+ and +params+.
+
+The snippet below is similar with Quark::Session#user that retrieves user information BUT returns the unparsed response.
+  response = session.get(:resource => 'user')
+  => #<Typhoeus::Response:0x123456a>
+
+For convenience, Quark uses JSON format by default, but you can also specify XML format.
+
+  response = session.get(:resource => 'user', :params => {:format => 'json'})
+  => #<Typhoeus::Response:0x123456b>
+  JSON.parse(response.body)
+  response = session.get(:resource => 'user', :params => {:format => 'xml'})
+  => #<Typhoeus::Response:0x123456c>
+  Nokogiri::XML(response.body)
+
+You can pass as many +params+ as needed, depending on the +resource+ you use.
+
+  response = session.get(:resource => 'photos', :params => {:aid => '22222', :format => 'xml'})
+  => #<Typhoeus::Response:0x123456d>
 
 == Copyright
 
