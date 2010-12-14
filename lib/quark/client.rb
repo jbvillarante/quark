@@ -4,9 +4,7 @@ module Quark
   class Client
     def initialize(params)
       @settings = {
-        :endpoint => 'http://api.friendster.com/v1',
-        :api_key => nil,
-        :api_secret => nil
+        :endpoint => 'http://api.friendster.com/v1'
       }.merge(params)
 
       raise ArgumentError, 'Missing required parameter: api_key' if @settings[:api_key] == nil
