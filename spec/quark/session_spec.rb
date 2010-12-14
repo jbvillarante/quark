@@ -173,14 +173,13 @@ describe 'Quark::Session' do
       Typhoeus::Hydra.hydra.stub(:get, %r{/user}).and_return(stub_response)
       session = Quark::Session.new(@arguments)
       response = session.get(:resource => 'user')
-      puts response
       response.should be_an_instance_of(Typhoeus::Response)
       [:body, :code, :status_message, :request].each {|method|
         response.should respond_to(method)
       }
     end
 
-    specify 'should accept an multiple params hash' do
+    specify 'should accept multiple params hash' do
       stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('photos_response_valid.json'))
       Typhoeus::Hydra.hydra.stub(:get, %r{/photos}).and_return(stub_response)
       session = Quark::Session.new(@arguments)
