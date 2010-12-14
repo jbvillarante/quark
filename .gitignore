@@ -40,3 +40,6 @@ pkg
 #
 # For vim:
 *.swp
+
+# RubyMine metadata directory
+.idea
