@@ -23,3 +23,5 @@ def test_data(file_name)
   path = File.join(File.dirname(__FILE__), 'data', file_name)
   File.open(path, 'r') { |handle| handle.read }
 end
+
+require 'nokogiri'
