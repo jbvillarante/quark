@@ -18,12 +18,16 @@ Jeweler::Tasks.new do |gem|
   gem.summary = %Q{Friendster v1 API wrapper}
   gem.description = %Q{Quark encapsulates Friendster API v1 for Project Neutron.}
   gem.email = "release@friendster.com"
-  gem.authors = ["Anna Marseille D. Gabutero <agabutero@friendster.com>"]
+  gem.authors = ["Anna Marseille D. Gabutero <agabutero@friendster.com>", "Andro Salinas <asalinas@friendster.com>"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
-  gem.add_runtime_dependency 'nokogiri', '>= 1.4.3'
   gem.add_runtime_dependency 'typhoeus', '>= 0.2.0'
-  #  gem.add_development_dependency 'rspec', '> 1.2.3'
+  gem.add_runtime_dependency "json", ">= 1.4.6"
+  gem.add_development_dependency 'rspec', '> 2.0'
+  gem.add_development_dependency 'bundler', '~> 1.0.0'
+  gem.add_development_dependency 'jeweler', '~> 1.5.1'
+  gem.add_development_dependency 'nokogiri', '>= 1.4.3'
+  gem.add_development_dependency 'rcov', '>= 0'
 end
 Jeweler::RubygemsDotOrgTasks.new
 
