@@ -1,4 +1,4 @@
-require 'nokogiri'
+require 'json'
 
 module Quark
   class Client
@@ -20,22 +20,20 @@ module Quark
     end
 
     def get_token
-      response = Quark::UnsignedRequest.post(@settings[:endpoint], 'token', :params => { :api_key => @settings[:api_key] })
-      Nokogiri::XML(response.body).css("auth_token").text
+      response = Quark::UnsignedRequest.post(@settings[:endpoint], 'token', :params => { :api_key => @settings[:api_key], :format => 'json' })
+      eval(response.body)
     end
     
     def login(email, password)
-      response = Quark::UnsignedRequest.post(@settings[:endpoint], 'login', :params => { :api_key => @settings[:api_key], :user_email => email, :user_pwd => password, :auth_token => get_token })
-      session_key = Nokogiri::XML(response.body).css('session_key').text
-      uid = Nokogiri::XML(response.body).css('uid').text
-      create_session(:session_key => session_key, :uid => uid)
+      response = Quark::UnsignedRequest.post(@settings[:endpoint], 'login', :params => { :api_key => @settings[:api_key], :user_email => email, :user_pwd => password, :auth_token => get_token, :format => 'json' })
+      options = JSON.parse(response.body)
+      create_session(:session_key => options['session_key'], :uid => options['uid'])
     end
 
     def create_session_from_token(token)
-      response = Quark::SignedRequest.post(@settings[:endpoint], 'session', @settings[:api_secret ], :params => { :api_key => @settings[:api_key], :auth_token => token })
-      session_key = Nokogiri::XML(response.body).css('session_key').text
-      uid = Nokogiri::XML(response.body).css('uid').text
-      create_session(:session_key => session_key, :uid => uid)
+      response = Quark::SignedRequest.post(@settings[:endpoint], 'session', @settings[:api_secret ], :params => { :api_key => @settings[:api_key], :auth_token => token, :format => 'json' })
+      options = JSON.parse(response.body)
+      create_session(:session_key => options['session_key'], :uid => options['uid'])
     end
 
     def create_session(params)
