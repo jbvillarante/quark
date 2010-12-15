@@ -59,7 +59,7 @@ describe 'Quark::Session' do
     end
   end
   
-  describe 'User API Calls' do
+  describe 'User Convenience API Calls' do
   
     before :each do 
       @arguments = {
@@ -125,7 +125,7 @@ describe 'Quark::Session' do
     
     specify "should retrieve his user information" do
       stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('user_response_valid.json'))
-      Typhoeus::Hydra.hydra.stub(:get, %r{/primaryphoto}).and_return(stub_response)
+      Typhoeus::Hydra.hydra.stub(:get, %r{/user}).and_return(stub_response)
       session = Quark::Session.new(@arguments)
       user_info = session.user
       user_info.should_not be_empty
@@ -156,6 +156,62 @@ describe 'Quark::Session' do
         "birthday"].each {|key| user_info.has_key?(key).should be_true }
     end
   end
+  
+  describe 'User Direct API Calls' do
+    
+    before :each do
+      @arguments = {
+        :api_key => @api_key,
+        :api_secret => @api_secret,
+        :session_key => 'Peni5ks8UkrpLayjuhpXy53EoiyCZ0zG-43169473',
+        :uid => '43169473'
+      }    
+    end
+
+    specify 'should  call APIs directly and return the raw response' do
+      stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('user_response_valid.json'))
+      Typhoeus::Hydra.hydra.stub(:get, %r{/user}).and_return(stub_response)
+      session = Quark::Session.new(@arguments)
+      response = session.get(:resource => 'user')
+      response.should be_an_instance_of(Typhoeus::Response)
+      [:body, :code, :status_message, :request].each {|method|
+        response.should respond_to(method)
+      }
+    end
+
+    specify 'should accept multiple params hash' do
+      stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('photos_response_valid.json'))
+      Typhoeus::Hydra.hydra.stub(:get, %r{/photos}).and_return(stub_response)
+      session = Quark::Session.new(@arguments)
+      album_id = '709277604'
+      response = session.get(:resource => 'photos', :params => {:aid => album_id, :format => 'json'})
+      photos = JSON.parse(response.body)['photo']
+      photos.should_not be_empty
+      photos.each do |photo|
+        photo['owner'].should == session.uid
+        photo['aid'].should == album_id
+      end
+    end
+
+    specify 'should return XML format when specified' do
+      stub_response = Typhoeus::Response.new(:code => 200, :headers => "Content-Type: text/xml", :body => test_data('user_response_valid.xml'))
+      Typhoeus::Hydra.hydra.stub(:get, %r{/user}).and_return(stub_response)
+      session = Quark::Session.new(@arguments)
+      response = session.get(:resource => 'user', :params => {:format => 'xml'})
+      response.headers.should include('text/xml')
+      uid = Nokogiri::XML(response.body).css('uid').text
+      uid.should == session.uid
+    end
+
+    specify 'should return JSON format when specified' do
+      stub_response = Typhoeus::Response.new(:code => 200, :headers => "Content-Type: text/html", :body => test_data('user_response_valid.json'))
+      Typhoeus::Hydra.hydra.stub(:get, %r{/user}).and_return(stub_response)
+      session = Quark::Session.new(@arguments)
+      response = session.get(:resource => 'user', :params => {:format => 'json'})
+      response.headers.should_not include('text/xml')
+      uid = JSON.parse(response.body)['user']['uid']
+      uid.should == session.uid
+    end
+  end
 
 end
-

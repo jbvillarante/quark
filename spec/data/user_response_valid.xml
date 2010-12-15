@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?><user_response xmlns="http://api.friendster.com/v1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://api.friendster.com/v1/friendster.xsd">
+<user>
+<uid>43169473</uid>
+<first_name><![CDATA[ﻬﻬﭿﭏﻻפּﻍﻑﻈﺢﺙﺷﺻﻁ]]></first_name>
+<last_name><![CDATA[Tester]]></last_name>
+<url>http://profiles.friendster.com/43169473</url>
+<primary_photo_url>http://photos.friendster.com/photos/37/49/43169473/2_783185275m.jpg</primary_photo_url>
+<location>
+<country>Philippines</country>
+<state>Metro Manila</state>
+<city>Makati</city>
+<zip>94299</zip>
+</location>
+<hometown></hometown>
+<user_type>Normal</user_type>
+<fan_profile_type>None</fan_profile_type>
+<fan_profile_category>None</fan_profile_category>
+<relationship_status>It's Complicated TM</relationship_status>
+<gender>Male</gender>
+<member_since>
+<year>2007</year>
+<month>05</month>
+</member_since>
+<interested_in list="true">
+<interest>Friends</interest>
+</interested_in>
+<occupation></occupation>
+<companies></companies>
+<hobbies_and_interests></hobbies_and_interests>
+<affiliations></affiliations>
+<college_list>
+</college_list>
+<school_list>
+</school_list>
+<school_other></school_other>
+<favorites>
+<books></books>
+<movies></movies>
+<music></music>
+<tv_shows></tv_shows>
+</favorites>
+<about_me></about_me>
+<want_to_meet></want_to_meet>
+<birthday>
+<year>1970</year>
+<month>01</month>
+<day>01</day>
+</birthday>
+</user>
+</user_response>
