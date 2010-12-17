@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
     "lib/quark/client.rb",
     "lib/quark/request.rb",
     "lib/quark/session.rb",
+    "quark.gemspec",
     "spec/data/albums_response_valid.json",
     "spec/data/login_response_valid.json",
     "spec/data/photo_response_valid.json",
