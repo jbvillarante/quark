@@ -2,6 +2,14 @@
 
 *Quark* encapsulates the Friendster v1 API for Project Neutron.
 
+== Installation
+
+There are two ways to install Quark:
+
+# Run +rake build+ and install the generated gem.
+
+# Add Quark as a git submodule in your project.
+
 == Usage
 
 === Obtaining a Token
