@@ -46,5 +46,6 @@ describe 'Quark::SignedRequest' do
     response = Quark::SignedRequest.get(@default_endpoint, resource, @api_secret, :params => { :api_key => @api_key } )
     response.mock.should be_true
     response.request.params.should include :sig
+    response.request.params[:sig].should == Digest::MD5.hexdigest([ "/v1/#{resource}", "api_key=#{@api_key}", @api_secret ].join)
   end
 end
