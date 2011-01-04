@@ -2,13 +2,28 @@ require 'typhoeus'
 require 'digest/md5'
 
 module Quark
+  class Exception < StandardError
+    attr_reader :response
+    def initialize(response)
+      @response = response
+    end
+  end
+
   class UnsignedRequest < Typhoeus::Request
     def self.post(endpoint, resource, options)
-      super("#{endpoint}/#{resource}", options)
+      check_for_errors(super("#{endpoint}/#{resource}", options))
     end
 
     def self.get(endpoint, resource, options)
-      super("#{endpoint}/#{resource}", options)
+      check_for_errors(super("#{endpoint}/#{resource}", options))
+    end
+
+    def self.check_for_errors(response)
+      if response.code == 200
+        response
+      else
+        raise Quark::Exception.new(response)
+      end
     end
   end
 
