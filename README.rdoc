@@ -12,23 +12,20 @@ There are two ways to install Quark:
 
 == Usage
 
-=== Obtaining a Token
-
-This is the first step to creating a valid API session, unless your app is
-being invoked on the canvas page.
-
-  client = Quark::Client.new(:api_key => your_api_key, :api_secret => your_api_secret)
-  token = client.get_token
-
 === Establishing a Session
 
 There are three ways to obtain a valid session key:
 
 ==== Using an Authenticated Token
 
-You must authenticate tokens obtained from the +token+ API call before using
-them to create a session.  To do this, redirect the user to Friendster's widget
-login page:
+First, request a token:
+
+  client = Quark::Client.new(:api_key => your_api_key, :api_secret => your_api_secret)
+  token = client.get_token
+
+You must authenticate this token with valid user credentials before you can use
+it to create a session.  To perform the validation, redirect the user to
+Friendster's widget login page:
 
   http://www.friendster.com/widget_login.php?api_key=your_api_key&auth_token=your_token
 
