@@ -35,6 +35,9 @@ describe 'Quark::Client' do
   end
 
   specify 'can log in with a user email and password using a trusted API key' do
+    stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('token_response_valid.json'))
+    Typhoeus::Hydra.hydra.stub(:post, %r{/token}, :params => { :format => 'json' }).and_return(stub_response)
+
     stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('login_response_valid.json'))
     Typhoeus::Hydra.hydra.stub(:post, %r{/login}, :params => { :format => 'json' }).and_return(stub_response)
     
