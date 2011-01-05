@@ -39,6 +39,7 @@ can now use the token to obtain a session:
 
 Trusted applications can invoke the +login+ API with valid user credentials.
 
+  client = Quark::Client.new(:api_key => your_api_key, :api_secret => your_api_secret)
   session = client.login(user_email, user_password)
 
 ==== Canvas Page
@@ -46,6 +47,7 @@ Trusted applications can invoke the +login+ API with valid user credentials.
 Applications displayed on their canvas page automatically receive a valid
 session key and the associated user ID as parameters.
 
+  client = Quark::Client.new(:api_key => your_api_key, :api_secret => your_api_secret)
   session = client.create_session(:session_key => session_key, :uid => uid)
 
 === Invoking Convenience API Calls
