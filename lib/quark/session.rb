@@ -44,8 +44,16 @@ module Quark
       JSON.parse(response.body)['photo']
     end
     
-    def user
-      response = get(:resource => 'user')
+    def user(ids = nil)
+      resource = case
+        when ids.is_a?(Array)
+          "/user/#{ids.join(',')}"
+        when ids.is_a?(String) || ids.is_a?(Integer)
+          "/user/#{ids}"
+        else
+          '/user'
+      end
+      response = get(:resource => resource)
       JSON.parse(response.body)['user']
     end
       

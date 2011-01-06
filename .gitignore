@@ -43,3 +43,6 @@ pkg
 
 # RubyMine metadata directory
 .idea
+
+# RVM
+.rvmrc
