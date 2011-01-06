@@ -47,11 +47,11 @@ module Quark
     def user(ids = nil)
       resource = case
         when ids.is_a?(Array)
-          "/user/#{ids.join(',')}"
+          "user/#{ids.join(',')}"
         when ids.is_a?(String) || ids.is_a?(Integer)
-          "/user/#{ids}"
+          "user/#{ids}"
         else
-          '/user'
+          'user'
       end
       response = get(:resource => resource)
       JSON.parse(response.body)['user']

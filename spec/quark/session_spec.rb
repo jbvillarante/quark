@@ -161,17 +161,17 @@ describe 'Quark::Session' do
       end
 
       it "should retrieve user info using a user_id (as Integer)" do
-        @session.should_receive(:get).with(:resource => '/user/123') { @stub_response }
+        @session.should_receive(:get).with(:resource => 'user/123') { @stub_response }
         @session.user(123)
       end
 
       it "should retrieve user info using a user_id (as String)" do
-        @session.should_receive(:get).with(:resource => '/user/123') { @stub_response }
+        @session.should_receive(:get).with(:resource => 'user/123') { @stub_response }
         @session.user('123')
       end
 
       it "should retrieve user info using an array of user ids" do
-        @session.should_receive(:get).with(:resource => '/user/123,888,777') { @stub_response }
+        @session.should_receive(:get).with(:resource => 'user/123,888,777') { @stub_response }
         @session.user([123, '888', 777])
       end
     end
