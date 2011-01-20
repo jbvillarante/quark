@@ -3,7 +3,7 @@ source "http://rubygems.org"
 # Example:
 gem "typhoeus", ">= 0.2.0"
 gem "json", ">= 1.4.6"
-
+gem 'nokogiri', '1.4.4'
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
