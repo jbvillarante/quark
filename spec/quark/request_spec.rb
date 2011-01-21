@@ -86,16 +86,41 @@ describe 'Quark::Exception' do
   end
 
   context "when XML is returned" do
-    specify 'should return the error message when outputting the exception' do
-      error_response = Typhoeus::Response.new(:code => 500, :headers => 'Content-Type: application/xml', :body => '<?xml version="1.0" encoding="UTF-8"?>
+    context "when message is in <error_msg>" do
+      specify 'should return the error message when outputting the exception' do
+        error_response = Typhoeus::Response.new(:code => 500, :headers => 'Content-Type: application/xml', :body => '<?xml version="1.0" encoding="UTF-8"?>
         <error_response>
           <error_code>100</error_code>
           <error_msg>Error Message</error_msg>
         </error_response>'
-      )
+        )
+
+        e = Quark::Exception.new(error_response)
+        e.message.should == '100: Error Message'
+      end
+    end
+
+    context "when message is in <error_message>" do
+      specify 'should return the error message when outputting the exception' do
+        error_response = Typhoeus::Response.new(:code => 500, :headers => 'Content-Type: application/xml', :body => '<?xml version="1.0" encoding="UTF-8"?>
+          <error_response>
+            <error_code>100</error_code>
+            <error_message>Error Message</error_message>
+          </error_response>'
+        )
+
+        e = Quark::Exception.new(error_response)
+        e.message.should == '100: Error Message'
+      end
+    end
+  end
+
+  context "when the error response not JSON or XML" do
+    specify 'should return the error message when outputting the exception' do
+      error_response = Typhoeus::Response.new(:code => 500, :headers => 'Content-Type: text/html', :body => 'whatever')
 
       e = Quark::Exception.new(error_response)
-      e.message.should == '100: Error Message'
+      e.message.should == '0xdeadbeef: Could not read the error response from the server'
     end
   end
 end

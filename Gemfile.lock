@@ -28,7 +28,7 @@ DEPENDENCIES
   bundler (~> 1.0.0)
   jeweler (~> 1.5.1)
   json (>= 1.4.6)
-  nokogiri (>= 1.4.3)
+  nokogiri (= 1.4.4)
   rcov
   rspec (>= 2)
   typhoeus (>= 0.2.0)

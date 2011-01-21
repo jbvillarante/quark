@@ -6,14 +6,19 @@ module Quark
     attr_reader :response
     def initialize(response)
       @response = response
-      if response.headers =~ /Content-Type:.*\/json/i
+      begin
         json = JSON.parse(response.body)
         @code = json['error_code']
         @message = json['error_msg']
-      else
-        xml = Nokogiri::XML.parse(response.body)
-        @code = xml.at_css('error_code').text
-        @message = xml.at_css('error_msg').text
+      rescue JSON::ParserError
+        begin
+          xml = Nokogiri::XML.parse(response.body) { |config| config.strict }
+          @code = xml.at_css('error_code').text
+          @message = xml.at_css('error_msg').nil? ? xml.at_css('error_message').text : xml.at_css('error_msg').text
+        rescue Nokogiri::XML::SyntaxError
+          @code = '0xdeadbeef'
+          @message = 'Could not read the error response from the server'
+        end
       end
     end
 
