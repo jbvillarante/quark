@@ -84,19 +84,30 @@ describe 'Quark::Session' do
       end
     end
     
-    specify "should retrieve the list of photos in a specific album" do
-      stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('photos_response_valid.json'))
-      Typhoeus::Hydra.hydra.stub(:get, %r{/photos}, :params => {:format => 'json'}).and_return(stub_response)
-      session = Quark::Session.new(@arguments)
-      album_id = '709277604'
-      photos = session.photos(album_id)
-      photos.should_not be_empty
-      photos.each do |photo| 
-        photo['owner'].should == session.uid
-        photo['aid'].should == album_id
+    describe '/photos' do
+      specify "should retrieve the list of photos in a specific album" do
+        stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('photos_response_valid.json'))
+        Typhoeus::Hydra.hydra.stub(:get, %r{/photos}, :params => {:format => 'json'}).and_return(stub_response)
+        session = Quark::Session.new(@arguments)
+        album_id = '709277604'
+        photos = session.photos(album_id)
+        photos.should_not be_empty
+        photos.each do |photo| 
+          photo['owner'].should == session.uid
+          photo['aid'].should == album_id
+        end
+      end
+      
+      specify "should return an empty array if the specified album is empty" do
+        stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('photos_response_empty.json'))
+        Typhoeus::Hydra.hydra.stub(:get, %r{/photos}, :params => {:format => 'json'}).and_return(stub_response)
+        session = Quark::Session.new(@arguments)
+        album_id = '709277604'
+        photos = session.photos(album_id)
+        photos.should be_empty
       end
     end
-    
+
     specify "should retrieve a photo" do
       stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('photo_response_valid.json'))
       Typhoeus::Hydra.hydra.stub(:get, %r{/photo\/\d*}, :params => {:format => 'json'}).and_return(stub_response)

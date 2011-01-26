@@ -30,8 +30,9 @@ module Quark
     end
     
     def photos(album_id)
-      response = get(:resource => 'photos', :params => {:aid => album_id} )
-      JSON.parse(response.body)['photo']
+      response = get(:resource => 'photos', :params => {:aid => album_id})
+      json_object = JSON.parse(response.body)
+      json_object.empty? ? json_object : json_object['photo']
     end
     
     def photo(photo_id)
