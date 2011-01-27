@@ -87,9 +87,11 @@ describe 'Quark::Session' do
     describe '/photos' do
       specify "should retrieve the list of photos in a specific album" do
         stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('photos_response_valid.json'))
-        Typhoeus::Hydra.hydra.stub(:get, %r{/photos}, :params => {:format => 'json'}).and_return(stub_response)
+
         session = Quark::Session.new(@arguments)
         album_id = '709277604'
+        session.should_receive(:get).with(:resource => 'photos', :params => { :aid => album_id }) { stub_response }
+
         photos = session.photos(album_id)
         photos.should_not be_empty
         photos.each do |photo| 
@@ -98,6 +100,17 @@ describe 'Quark::Session' do
         end
       end
       
+      specify "should retrieve all photos if no album is specified" do
+        stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('photos_response_no_album_id.json'))
+        session = Quark::Session.new(@arguments)
+        session.should_receive(:get).with(:resource => 'photos') { stub_response }
+        photos = session.photos
+        photos.should_not be_empty
+        photos.each do |photo| 
+          photo['owner'].should == session.uid
+        end
+      end
+
       specify "should return an empty array if the specified album is empty" do
         stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('photos_response_empty.json'))
         Typhoeus::Hydra.hydra.stub(:get, %r{/photos}, :params => {:format => 'json'}).and_return(stub_response)
