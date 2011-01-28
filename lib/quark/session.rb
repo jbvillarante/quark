@@ -64,6 +64,10 @@ module Quark
       Quark::SignedRequest.get(endpoint, data[:resource], @settings[:api_secret], :params => build_params(data[:params]))
     end
     
+    def post(data)
+      Quark::SignedRequest.post(endpoint, data[:resource], @settings[:api_secret], :params => build_params(data[:params]))
+    end
+    
     private
     def build_params(options)
       options ||= {}
