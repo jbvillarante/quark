@@ -35,6 +35,10 @@ module Quark
     def self.get(endpoint, resource, options)
       check_for_errors(super("#{endpoint}/#{resource}", options))
     end
+    
+    def self.put(endpoint, resource, options)
+      check_for_errors(super("#{endpoint}/#{resource}", options))
+    end
 
     def self.check_for_errors(response)
       if response.code == 200
@@ -52,6 +56,11 @@ module Quark
     end
 
     def self.get(endpoint, resource, secret_key, options)
+      options[:params].merge!({ :sig => signature(endpoint, resource, secret_key, options[:params]) })
+      super(endpoint, resource, options)
+    end
+    
+    def self.put(endpoint, resource, secret_key, options)
       options[:params].merge!({ :sig => signature(endpoint, resource, secret_key, options[:params]) })
       super(endpoint, resource, options)
     end

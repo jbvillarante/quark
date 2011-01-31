@@ -22,6 +22,14 @@ describe 'Quark::UnsignedRequest' do
     response.mock.should be_true
     response.request.params.should_not include :sig
   end
+  
+  specify 'should not add a signature to its PUT parameters' do
+    resource = "token"
+    Typhoeus::Hydra.hydra.stub(:put, %r{#{@default_endpoint}/#{resource}\?.*}).and_return(Typhoeus::Response.new(:code => 200))
+    response = Quark::UnsignedRequest.put(@default_endpoint, resource, :params => { :api_key => @api_key } )
+    response.mock.should be_true
+    response.request.params.should_not include :sig
+  end
 
   specify 'should throw an exception if response code is not 200' do
     resource = "token"
@@ -61,6 +69,15 @@ describe 'Quark::SignedRequest' do
     resource = "token"
     Typhoeus::Hydra.hydra.stub(:get, %r{#{@default_endpoint}/#{resource}\?.*}).and_return(Typhoeus::Response.new(:code => 200))
     response = Quark::SignedRequest.get(@default_endpoint, resource, @api_secret, :params => { :api_key => @api_key } )
+    response.mock.should be_true
+    response.request.params.should include :sig
+    response.request.params[:sig].should == Digest::MD5.hexdigest([ "/v1/#{resource}", "api_key=#{@api_key}", @api_secret ].join)
+  end
+  
+  specify 'should add a signature to its PUT parameters' do
+    resource = "token"
+    Typhoeus::Hydra.hydra.stub(:put, %r{#{@default_endpoint}/#{resource}\?.*}).and_return(Typhoeus::Response.new(:code => 200))
+    response = Quark::SignedRequest.put(@default_endpoint, resource, @api_secret, :params => { :api_key => @api_key } )
     response.mock.should be_true
     response.request.params.should include :sig
     response.request.params[:sig].should == Digest::MD5.hexdigest([ "/v1/#{resource}", "api_key=#{@api_key}", @api_secret ].join)

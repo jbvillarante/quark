@@ -293,6 +293,45 @@ describe 'Quark::Session' do
       end    
     end
     
+    describe 'PUT methods' do
+      specify 'should  call APIs directly and return the raw response' do
+        stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('put_photo_valid.json'))
+        Typhoeus::Hydra.hydra.stub(:put, %r{/photo/\d+/\d+}, :params => {:format => 'json'}).and_return(stub_response)
+        session = Quark::Session.new(@arguments)
+        uid = session.uid
+        pid = '12783185275'
+        response = session.put(:resource => "photo/#{uid}/#{pid}", :params => {:caption => 'dummy caption'})
+        response.should be_an_instance_of(Typhoeus::Response)
+        [:body, :code, :status_message, :request].each {|method|
+          response.should respond_to(method)
+        }
+      end
+
+      specify 'should return XML format when specified' do
+        stub_response = Typhoeus::Response.new(:code => 200, :headers => "Content-Type: text/xml", :body => test_data('put_photo_valid.xml'))
+        Typhoeus::Hydra.hydra.stub(:put, %r{/photo/\d+/\d+}, :params => {:format => 'xml'}).and_return(stub_response)
+        session = Quark::Session.new(@arguments)
+        uid = session.uid
+        pid = '12783185275'
+        response = session.put(:resource => "photo/#{uid}/#{pid}", :params => {:caption => 'dummy caption', :format => 'xml'})
+        response.headers.should include('text/xml')
+        status = Nokogiri::XML(response.body).css('status').text
+        status.should == 'SUCCESS'
+      end
+
+      specify 'should return JSON format when specified' do
+        stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('put_photo_valid.json'))
+        Typhoeus::Hydra.hydra.stub(:put, %r{/photo/\d+/\d+}, :params => {:format => 'json'}).and_return(stub_response)
+        session = Quark::Session.new(@arguments)
+        uid = session.uid
+        pid = '12783185275'
+        response = session.put(:resource => "photo/#{uid}/#{pid}", :params => {:caption => 'dummy caption', :format => 'json'})
+        response.headers.should_not include('text/xml')
+        status = JSON.parse(response.body)['status']
+        status.should == 'SUCCESS'
+      end    
+    end
+    
   end
 
 end
