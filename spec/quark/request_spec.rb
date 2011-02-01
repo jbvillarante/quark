@@ -87,7 +87,7 @@ describe 'Quark::SignedRequest' do
     resource = "token"
     Typhoeus::Hydra.hydra.stub(:get, %r{#{@default_endpoint}/#{resource}\?.*}).and_return(Typhoeus::Response.new(:code => 500))
     lambda {
-      response = Quark::SignedRequest.get(@default_endpoint, resource, @api_secret, params => { :api_key => @api_key } )
+      Quark::SignedRequest.get(@default_endpoint, resource, @api_secret, params => { :api_key => @api_key } )
     }.should raise_error
   end
 end
@@ -99,6 +99,8 @@ describe 'Quark::Exception' do
 
       e = Quark::Exception.new(error_response)
       e.message.should == '100: Error Message'
+      e.error_code.should == '100'
+      e.error_message.should == 'Error Message'
     end
   end
 
@@ -114,6 +116,8 @@ describe 'Quark::Exception' do
 
         e = Quark::Exception.new(error_response)
         e.message.should == '100: Error Message'
+        e.error_code.should == '100'
+        e.error_message.should == 'Error Message'
       end
     end
 
@@ -128,6 +132,8 @@ describe 'Quark::Exception' do
 
         e = Quark::Exception.new(error_response)
         e.message.should == '100: Error Message'
+        e.error_code.should == '100'
+        e.error_message.should == 'Error Message'
       end
     end
   end
@@ -138,6 +144,8 @@ describe 'Quark::Exception' do
 
       e = Quark::Exception.new(error_response)
       e.message.should == '0xdeadbeef: Could not read the error response from the server'
+      e.error_code.should == '0xdeadbeef'
+      e.error_message.should == 'Could not read the error response from the server'
     end
   end
 end

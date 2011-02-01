@@ -3,27 +3,27 @@ require 'digest/md5'
 
 module Quark
   class Exception < StandardError
-    attr_reader :response
+    attr_reader :response, :error_code, :error_message
     def initialize(response)
       @response = response
       begin
         json = JSON.parse(response.body)
-        @code = json['error_code']
-        @message = json['error_msg']
+        @error_code = json['error_code']
+        @error_message = json['error_msg']
       rescue JSON::ParserError
         begin
           xml = Nokogiri::XML.parse(response.body) { |config| config.strict }
-          @code = xml.at_css('error_code').text
-          @message = xml.at_css('error_msg').nil? ? xml.at_css('error_message').text : xml.at_css('error_msg').text
+          @error_code = xml.at_css('error_code').text
+          @error_message = xml.at_css('error_msg').nil? ? xml.at_css('error_message').text : xml.at_css('error_msg').text
         rescue Nokogiri::XML::SyntaxError
-          @code = '0xdeadbeef'
-          @message = 'Could not read the error response from the server'
+          @error_code = '0xdeadbeef'
+          @error_message = 'Could not read the error response from the server'
         end
       end
     end
 
     def to_s
-      "#{@code}: #{@message}"
+      "#{error_code}: #{error_message}"
     end
   end
 
