@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{quark}
-  s.version = "0.2.8"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Anna Marseille D. Gabutero <agabutero@friendster.com>", "Andro Salinas <asalinas@friendster.com>"]
-  s.date = %q{2010-12-17}
+  s.authors = ["Anna Marseille D. Gabutero <agabutero@friendster.com>", "Andro Salinas <asalinas@friendster.com>", "Zander Magtipon <amagtipon@friendster.com>"]
+  s.date = %q{2011-02-02}
   s.description = %q{Quark encapsulates Friendster API v1 for Project Neutron.}
   s.email = %q{release@friendster.com}
   s.extra_rdoc_files = [
@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "autotest/discover.rb",
+    "init.rb",
     "lib/quark.rb",
     "lib/quark/client.rb",
     "lib/quark/request.rb",
@@ -34,8 +35,14 @@ Gem::Specification.new do |s|
     "spec/data/albums_response_valid.json",
     "spec/data/login_response_valid.json",
     "spec/data/photo_response_valid.json",
+    "spec/data/photos_response_empty.json",
+    "spec/data/photos_response_no_album_id.json",
     "spec/data/photos_response_valid.json",
+    "spec/data/post_shoutout_valid.json",
+    "spec/data/post_shoutout_valid.xml",
     "spec/data/primary_photo_response_valid.json",
+    "spec/data/put_photo_valid.json",
+    "spec/data/put_photo_valid.xml",
     "spec/data/session_response_valid.json",
     "spec/data/token_response_valid.json",
     "spec/data/user_response_valid.json",
@@ -62,30 +69,33 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<typhoeus>, [">= 0.2.0"])
+      s.add_runtime_dependency(%q<curb>, ["= 0.7.10"])
       s.add_runtime_dependency(%q<json>, [">= 1.4.6"])
       s.add_runtime_dependency(%q<nokogiri>, [">= 1.4.4"])
-      s.add_development_dependency(%q<rspec>, [">= 2"])
-      s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.5.1"])
+      s.add_development_dependency(%q<rspec>, [">= 2.4.0"])
+      s.add_development_dependency(%q<bundler>, [">= 1.0.9"])
+      s.add_development_dependency(%q<jeweler>, [">= 1.5.2"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
+      s.add_development_dependency(%q<webmock>, ["= 1.6.2"])
     else
-      s.add_dependency(%q<typhoeus>, [">= 0.2.0"])
+      s.add_dependency(%q<curb>, ["= 0.7.10"])
       s.add_dependency(%q<json>, [">= 1.4.6"])
-      s.add_dependency(%q<rspec>, [">= 2"])
-      s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_dependency(%q<jeweler>, ["~> 1.5.1"])
-      s.add_dependency(%q<rcov>, [">= 0"])
       s.add_dependency(%q<nokogiri>, [">= 1.4.4"])
+      s.add_dependency(%q<rspec>, [">= 2.4.0"])
+      s.add_dependency(%q<bundler>, [">= 1.0.9"])
+      s.add_dependency(%q<jeweler>, [">= 1.5.2"])
+      s.add_dependency(%q<rcov>, [">= 0"])
+      s.add_dependency(%q<webmock>, ["= 1.6.2"])
     end
   else
-    s.add_dependency(%q<typhoeus>, [">= 0.2.0"])
+    s.add_dependency(%q<curb>, ["= 0.7.10"])
     s.add_dependency(%q<json>, [">= 1.4.6"])
-    s.add_dependency(%q<rspec>, [">= 2"])
-    s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-    s.add_dependency(%q<jeweler>, ["~> 1.5.1"])
-    s.add_dependency(%q<rcov>, [">= 0"])
     s.add_dependency(%q<nokogiri>, [">= 1.4.4"])
+    s.add_dependency(%q<rspec>, [">= 2.4.0"])
+    s.add_dependency(%q<bundler>, [">= 1.0.9"])
+    s.add_dependency(%q<jeweler>, [">= 1.5.2"])
+    s.add_dependency(%q<rcov>, [">= 0"])
+    s.add_dependency(%q<webmock>, ["= 1.6.2"])
   end
 end
 

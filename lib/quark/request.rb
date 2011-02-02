@@ -1,4 +1,5 @@
-require 'typhoeus'
+require 'curb'
+require 'cgi'
 require 'digest/md5'
 
 module Quark
@@ -7,12 +8,12 @@ module Quark
     def initialize(response)
       @response = response
       begin
-        json = JSON.parse(response.body)
+        json = JSON.parse(response.body_str)
         @error_code = json['error_code']
         @error_message = json['error_msg']
       rescue JSON::ParserError
         begin
-          xml = Nokogiri::XML.parse(response.body) { |config| config.strict }
+          xml = Nokogiri::XML.parse(response.body_str) { |config| config.strict }
           @error_code = xml.at_css('error_code').text
           @error_message = xml.at_css('error_msg').nil? ? xml.at_css('error_message').text : xml.at_css('error_msg').text
         rescue Nokogiri::XML::SyntaxError
@@ -27,21 +28,24 @@ module Quark
     end
   end
 
-  class UnsignedRequest < Typhoeus::Request
+  class UnsignedRequest
     def self.post(endpoint, resource, options)
-      check_for_errors(super("#{endpoint}/#{resource}", options))
+      post_data = options[:params].map{|key, value| Curl::PostField.content(key.to_s, value)}
+      check_for_errors(Curl::Easy.http_post("#{endpoint}/#{resource}", *post_data))
     end
 
     def self.get(endpoint, resource, options)
-      check_for_errors(super("#{endpoint}/#{resource}", options))
+      get_params = options[:params].map{|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v)}"}.join('&')
+      check_for_errors(Curl::Easy.http_get("#{endpoint}/#{resource}?#{get_params}"))
     end
     
     def self.put(endpoint, resource, options)
-      check_for_errors(super("#{endpoint}/#{resource}", options))
+      put_data = options[:params].map{|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v)}"}.join('&')
+      check_for_errors(Curl::Easy.http_put("#{endpoint}/#{resource}", put_data){|c| c.headers['Content-Type'] = 'application/x-www-form-urlencoded'})
     end
 
     def self.check_for_errors(response)
-      if response.code == 200
+      if response.response_code == 200
         response
       else
         raise Quark::Exception.new(response)

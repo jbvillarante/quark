@@ -26,25 +26,25 @@ module Quark
 
     def albums
       response = get(:resource => 'albums')
-      JSON.parse(response.body)['album']
+      JSON.parse(response.body_str)['album']
     end
     
     def photos(album_id = nil)
       params = { :resource => 'photos' }
       params.merge!(:params => { :aid => album_id }) unless album_id == nil
       response = get(params)
-      json_object = JSON.parse(response.body)
+      json_object = JSON.parse(response.body_str)
       json_object.empty? ? json_object : json_object['photo']
     end
     
     def photo(photo_id)
       response = get(:resource => "photo/#{photo_id}")
-      JSON.parse(response.body)['photo']
+      JSON.parse(response.body_str)['photo']
     end
     
     def primary_photo
       response = get(:resource => "primaryphoto/#{uid}")
-      JSON.parse(response.body)['photo']
+      JSON.parse(response.body_str)['photo']
     end
     
     def user(ids = nil)
@@ -57,7 +57,7 @@ module Quark
           'user'
       end
       response = get(:resource => resource)
-      JSON.parse(response.body)['user']
+      JSON.parse(response.body_str)['user']
     end
       
     def get(data)

@@ -27,19 +27,15 @@ describe 'Quark::Client' do
   end
 
   specify 'should be able to obtain an auth_token' do
-    stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('token_response_valid.json'))
-    Typhoeus::Hydra.hydra.stub(:post, %r{/token}, :params => { :format => 'json' }).and_return(stub_response)
+    stub_request(:post, %r{/token}).with(:data => { :format => 'json' }).to_return(:body => test_data('token_response_valid.json'))
 
     client = Quark::Client.new(:api_key => @api_key, :api_secret => @api_secret)
     client.get_token.should == '840d82214118f22.88053767'
   end
 
   specify 'can log in with a user email and password using a trusted API key' do
-    stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('token_response_valid.json'))
-    Typhoeus::Hydra.hydra.stub(:post, %r{/token}, :params => { :format => 'json' }).and_return(stub_response)
-
-    stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('login_response_valid.json'))
-    Typhoeus::Hydra.hydra.stub(:post, %r{/login}, :params => { :format => 'json' }).and_return(stub_response)
+    stub_request(:post, %r{/token}).with(:data => { :format => 'json' }).to_return(:body => test_data('token_response_valid.json'))
+    stub_request(:post, %r{/login}).with(:data => { :format => 'json' }).to_return(:body => test_data('login_response_valid.json'))
     
     uid = '43169473'
     email = 'fake@gmail.com'
@@ -61,8 +57,7 @@ describe 'Quark::Client' do
   end
 
   specify 'can obtain a session key and UID from an authenticated auth_token' do
-    stub_response = Typhoeus::Response.new(:code => 200, :headers => "", :body => test_data('session_response_valid.json'))
-    Typhoeus::Hydra.hydra.stub(:post, %r{/session}, :params => { :format => 'json' }).and_return(stub_response)
+    stub_request(:post, %r{/session}).with(:data => { :format => 'json' }).to_return(:body => test_data('session_response_valid.json'))
     client = Quark::Client.new(:api_key => @api_key, :api_secret => @api_secret)
     session = client.create_session_from_token(@auth_token)
     session.session_key.should == 'Peni5ks8UkrpLayjuhpXy53EoiyCZ0zG-43169473'
