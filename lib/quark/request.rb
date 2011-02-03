@@ -31,7 +31,7 @@ module Quark
   class UnsignedRequest
     def self.post(endpoint, resource, options)
       post_data = options[:params].map{|key, value| Curl::PostField.content(key.to_s, value)}
-      check_for_errors(Curl::Easy.http_post("#{endpoint}/#{resource}", *post_data))
+      check_for_errors(Curl::Easy.http_post("#{endpoint}/#{resource}", post_data))
     end
 
     def self.get(endpoint, resource, options)

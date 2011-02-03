@@ -56,12 +56,18 @@ describe 'Quark::Client' do
     session.uid.should == uid
   end
 
-  specify 'can obtain a session key and UID from an authenticated auth_token' do
-    stub_request(:post, %r{/session}).with(:data => { :format => 'json' }).to_return(:body => test_data('session_response_valid.json'))
-    client = Quark::Client.new(:api_key => @api_key, :api_secret => @api_secret)
-    session = client.create_session_from_token(@auth_token)
-    session.session_key.should == 'Peni5ks8UkrpLayjuhpXy53EoiyCZ0zG-43169473'
-    session.uid.should == '43169473'
+  describe 'create_session_from_token' do
+    specify 'can obtain a session key and UID from an authenticated auth_token' do
+      auth_token = 'sadfasdfasdrqewpir'
+      stub_request(:post, %r{/session}).with(:data => { :auth_token => auth_token, :format => 'json' }).to_return(:body => test_data('session_response_valid.json'))
+      client = Quark::Client.new(:api_key => @api_key, :api_secret => @api_secret)
+      session = client.create_session_from_token(auth_token)
+      session.session_key.should == 'Peni5ks8UkrpLayjuhpXy53EoiyCZ0zG-43169473'
+      session.uid.should == '43169473'
+    end
+
+    specify 'should raise a helpful error if auth_token parameter is nil' do
+    end
   end
   
 end

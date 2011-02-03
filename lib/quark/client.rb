@@ -31,6 +31,7 @@ module Quark
     end
 
     def create_session_from_token(token)
+      raise ArgumentError, 'Token should not be nil' if token == nil
       response = Quark::SignedRequest.post(@settings[:endpoint], 'session', @settings[:api_secret ], :params => { :api_key => @settings[:api_key], :auth_token => token, :format => 'json' })
       options = JSON.parse(response.body_str)
       create_session(:session_key => options['session_key'], :uid => options['uid'])
