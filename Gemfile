@@ -13,5 +13,4 @@ group :development do
   gem "jeweler", ">= 1.5.2"
   gem "rcov", ">= 0"
   gem 'webmock', '1.6.2'
-  gem "ruby-debug", ">= 0.10.4"
 end

@@ -2,7 +2,6 @@ GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.2.4)
-    columnize (0.3.2)
     crack (0.1.8)
     curb (0.7.10)
     diff-lcs (1.1.2)
@@ -12,7 +11,6 @@ GEM
       git (>= 1.2.5)
       rake
     json (1.5.1)
-    linecache (0.43)
     nokogiri (1.4.4)
     rake (0.8.7)
     rcov (0.9.9)
@@ -24,11 +22,6 @@ GEM
     rspec-expectations (2.4.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.4.0)
-    ruby-debug (0.10.4)
-      columnize (>= 0.1)
-      ruby-debug-base (~> 0.10.4.0)
-    ruby-debug-base (0.10.4)
-      linecache (>= 0.3)
     webmock (1.6.2)
       addressable (>= 2.2.2)
       crack (>= 0.1.7)
@@ -44,5 +37,4 @@ DEPENDENCIES
   nokogiri (>= 1.4.4)
   rcov
   rspec (>= 2.4.0)
-  ruby-debug (>= 0.10.4)
   webmock (= 1.6.2)
