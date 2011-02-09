@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{quark}
-  s.version = "0.3.0"
+  s.version = "0.3.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Anna Marseille D. Gabutero <agabutero@friendster.com>", "Andro Salinas <asalinas@friendster.com>", "Zander Magtipon <amagtipon@friendster.com>"]
-  s.date = %q{2011-02-02}
+  s.date = %q{2011-02-09}
   s.description = %q{Quark encapsulates Friendster API v1 for Project Neutron.}
   s.email = %q{release@friendster.com}
   s.extra_rdoc_files = [
@@ -29,8 +29,10 @@ Gem::Specification.new do |s|
     "init.rb",
     "lib/quark.rb",
     "lib/quark/client.rb",
+    "lib/quark/invalid_signature_error.rb",
     "lib/quark/request.rb",
     "lib/quark/session.rb",
+    "lib/quark/util.rb",
     "quark.gemspec",
     "spec/data/albums_response_valid.json",
     "spec/data/login_response_valid.json",
@@ -73,7 +75,6 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<json>, [">= 1.4.6"])
       s.add_runtime_dependency(%q<nokogiri>, [">= 1.4.4"])
       s.add_development_dependency(%q<rspec>, [">= 2.4.0"])
-      s.add_development_dependency(%q<bundler>, [">= 1.0.9"])
       s.add_development_dependency(%q<jeweler>, [">= 1.5.2"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
       s.add_development_dependency(%q<webmock>, ["= 1.6.2"])
@@ -82,7 +83,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<json>, [">= 1.4.6"])
       s.add_dependency(%q<nokogiri>, [">= 1.4.4"])
       s.add_dependency(%q<rspec>, [">= 2.4.0"])
-      s.add_dependency(%q<bundler>, [">= 1.0.9"])
       s.add_dependency(%q<jeweler>, [">= 1.5.2"])
       s.add_dependency(%q<rcov>, [">= 0"])
       s.add_dependency(%q<webmock>, ["= 1.6.2"])
@@ -92,7 +92,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<json>, [">= 1.4.6"])
     s.add_dependency(%q<nokogiri>, [">= 1.4.4"])
     s.add_dependency(%q<rspec>, [">= 2.4.0"])
-    s.add_dependency(%q<bundler>, [">= 1.0.9"])
     s.add_dependency(%q<jeweler>, [">= 1.5.2"])
     s.add_dependency(%q<rcov>, [">= 0"])
     s.add_dependency(%q<webmock>, ["= 1.6.2"])
