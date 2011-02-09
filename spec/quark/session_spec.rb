@@ -8,6 +8,67 @@ describe 'Quark::Session' do
     @session_key = 'placeholder'
   end
 
+  describe ".from_friendster" do
+    def signature(query_hash)
+      path = URI.regexp(['http','https']).match(@callback_url)[7]
+      signed_keys = query_hash[:signed_keys].split(',')
+      string_to_sign = [
+              path,
+              signed_keys.sort.map { |key| "#{key}=#{query_hash[key.to_sym]}" },
+              @api_secret
+      ].flatten.join
+      Digest::MD5::hexdigest(string_to_sign)
+    end
+
+    before do
+      @callback_url = "http://example.com/callback"
+      @endpoint = "http://some.endpoint.at.friendster.com/v1"
+      @params = {
+              :api_key      => @api_key,
+              :expires      => 0,
+              :instance_id  => 1,
+              :lang         => "en-US",
+              :nonce        => 0,
+              :session_key  => @session_key,
+              :src          => "canvas",
+              :user_id      => 2,
+              :endpoint     => @endpoint
+      }
+      @params.merge!(signed_keys: (@params.keys + [:signed_keys]).join(','))
+      @params.merge!(sig: signature(@params))
+    end
+
+    describe "creates a new session" do
+      before do
+        @session = Quark::Session.from_friendster(@callback_url, @api_secret, @params)
+      end
+
+      it "with api key" do
+        @session.instance_variable_get(:@settings)[:api_key].should == @api_key
+      end
+
+      it "with session key" do
+        @session.session_key.should == @session_key
+      end
+
+      it "with user id" do
+        @session.uid.should == 2
+      end
+
+      it "with specified endpoint" do
+        @session.endpoint.should == @endpoint
+      end
+    end
+
+    context "when signature is invalid" do
+      it "raises an error" do
+        expect do
+          Quark::Session.from_friendster(@callback_url, @api_secret, @params.merge(sig: "wrong"))
+        end.to raise_error(Quark::InvalidSignatureError)
+      end
+    end
+  end
+
   describe 'parameter validation' do
     before :each do 
       @arguments = {

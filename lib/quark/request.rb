@@ -71,7 +71,7 @@ module Quark
 
     def self.signature(endpoint, resource, secret_key, options)
       Digest::MD5.hexdigest([ URI.parse("#{endpoint}/#{resource}").path,
-        options.keys.sort_by { |key| key.to_s }.map { |key|
+        options.keys.sort_by(&:to_s).map { |key|
           "#{key.to_s}=#{options[key]}"
         },
         secret_key ].flatten.join)

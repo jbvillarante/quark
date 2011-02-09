@@ -9,7 +9,6 @@ gem 'nokogiri', '>= 1.4.4'
 # Include everything needed to run rake, tests, features, etc.
 group :development do
   gem "rspec", '>= 2.4.0'
-  gem "bundler", ">= 1.0.9"
   gem "jeweler", ">= 1.5.2"
   gem "rcov", ">= 0"
   gem 'webmock', '1.6.2'
