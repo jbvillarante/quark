@@ -55,16 +55,19 @@ module Quark
 
   class SignedRequest < Quark::UnsignedRequest
     def self.post(endpoint, resource, secret_key, options)
+      options[:params][:signed_keys] = (options[:params].keys + [:signed_keys]).join(',')
       options[:params].merge!({ :sig => Quark::Util.signature("#{endpoint}/#{resource}", secret_key, options[:params]) })
       super(endpoint, resource, options)
     end
 
     def self.get(endpoint, resource, secret_key, options)
+      options[:params][:signed_keys] = (options[:params].keys + [:signed_keys]).join(',')
       options[:params].merge!({ :sig => Quark::Util.signature("#{endpoint}/#{resource}", secret_key, options[:params]) })
       super(endpoint, resource, options)
     end
     
     def self.put(endpoint, resource, secret_key, options)
+      options[:params][:signed_keys] = (options[:params].keys + [:signed_keys]).join(',')
       options[:params].merge!({ :sig => Quark::Util.signature("#{endpoint}/#{resource}", secret_key, options[:params]) })
       super(endpoint, resource, options)
     end

@@ -81,13 +81,12 @@ module Quark
 
     def build_params(options)
       options ||= {}
-      hash = {
+      {
         :api_key => @settings[:api_key],
         :session_key => session_key,
         :nonce => "#{Time.now.to_f}", 
         :format => 'json'
       }.merge(options)
-      hash.merge(signed_keys: (hash.keys + [:signed_keys]).join(','))
     end
   end
 end
