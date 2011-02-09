@@ -181,4 +181,4 @@ You can pass as many +params+ as needed, depending on the +resource+ you use.
 
 == Copyright
 
-Copyright (c) 2010 Friendster, Inc.
+Copyright (c) 2011 Friendster, Inc.
