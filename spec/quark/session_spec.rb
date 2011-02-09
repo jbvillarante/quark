@@ -9,17 +9,6 @@ describe 'Quark::Session' do
   end
 
   describe ".from_friendster" do
-    def signature(query_hash)
-      path = URI.regexp(['http','https']).match(@callback_url)[7]
-      signed_keys = query_hash[:signed_keys].split(',')
-      string_to_sign = [
-              path,
-              signed_keys.sort.map { |key| "#{key}=#{query_hash[key.to_sym]}" },
-              @api_secret
-      ].flatten.join
-      Digest::MD5::hexdigest(string_to_sign)
-    end
-
     before do
       @callback_url = "http://example.com/callback"
       @endpoint = "http://some.endpoint.at.friendster.com/v1"
@@ -35,7 +24,7 @@ describe 'Quark::Session' do
               :endpoint     => @endpoint
       }
       @params.merge!(signed_keys: (@params.keys + [:signed_keys]).join(','))
-      @params.merge!(sig: signature(@params))
+      @params.merge!(sig: Quark::Util.signature(@callback_url, @api_secret, @params))
     end
 
     describe "creates a new session" do

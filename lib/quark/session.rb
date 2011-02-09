@@ -3,7 +3,7 @@ require 'json'
 module Quark
   class Session
     def self.from_friendster(callback_url, api_secret, params)
-      raise Quark::InvalidSignatureError if params[:sig] != signature(callback_url, api_secret, params)
+      raise Quark::InvalidSignatureError if params[:sig] != Quark::Util.signature(callback_url, api_secret, params)
       Session.new(api_secret: api_secret, api_key: params[:api_key], session_key: params[:session_key], uid: params[:user_id], endpoint: params[:endpoint])
     end
 
@@ -78,17 +78,6 @@ module Quark
     end
     
     private
-
-    def self.signature(callback_url, api_secret, params)
-      path = URI.regexp(['http', 'https']).match(callback_url)[7]
-      signed_parameters = params[:signed_keys].split(',')
-      string_to_sign = [
-              path,
-              signed_parameters.sort.map { |key| "#{key}=#{params[key.to_sym]}" },
-              api_secret
-      ].flatten.join
-      Digest::MD5::hexdigest(string_to_sign)
-    end
 
     def build_params(options)
       options ||= {}
