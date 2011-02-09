@@ -47,26 +47,26 @@ describe 'Quark::SignedRequest' do
     @api_key = '718fb34497589503915e85470d9d5511'
     @api_secret = 'b39c091ea8bb895345f652cc3217a1cf'
     @default_endpoint = 'http://api.friendster.com/v1'
-    @signature = 'fake-signature'
+    @signature = 'e155ca09d637e41d87e1649680581a1c'
     Quark::SignedRequest.stub(:signature).and_return(@signature)
   end
   
   specify 'should add a signature to its POST parameters' do
     resource = "photos"
     stub_request(:post, "#{@default_endpoint}/#{resource}").with(:data => { :b => 1, :c => 2, :a => 0, :sig => @signature })
-    Quark::SignedRequest.post(@default_endpoint, resource, @api_secret, :params => { :b => 1, :c => 2, :a => 0 })
+    Quark::SignedRequest.post(@default_endpoint, resource, @api_secret, :params => { :b => 1, :c => 2, :a => 0, signed_keys: "b,c,a,signed_keys" })
   end
 
   specify 'should add a signature to its GET parameters' do
     resource = "token"
-    stub_request(:get, "#{@default_endpoint}/#{resource}").with(:query => { :api_key => @api_key, :sig => @signature })
-    Quark::SignedRequest.get(@default_endpoint, resource, @api_secret, :params => { :api_key => @api_key } )
+    stub_request(:get, "#{@default_endpoint}/#{resource}").with(:query => { :api_key => @api_key, :sig => @signature, signed_keys: "api_key,signed_keys" })
+    Quark::SignedRequest.get(@default_endpoint, resource, @api_secret, :params => { :api_key => @api_key, signed_keys: "api_key,signed_keys" } )
   end
   
   specify 'should add a signature to its PUT parameters' do
     resource = "token"
     stub_request(:put, "#{@default_endpoint}/#{resource}").with(:params => "api_key=#{@api_key}&sig=#{@signature}")
-    Quark::SignedRequest.put(@default_endpoint, resource, @api_secret, :params => { :api_key => @api_key } )
+    Quark::SignedRequest.put(@default_endpoint, resource, @api_secret, :params => { :api_key => @api_key, signed_keys: "api_key,signed_keys" } )
   end
 
   specify 'should throw an exception if response code is not 200' do
