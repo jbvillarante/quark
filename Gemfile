@@ -7,7 +7,7 @@ gem 'nokogiri', '>= 1.4.4'
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
-group :development do
+group :development, :test do
   gem "rspec", '>= 2.4.0'
   gem "jeweler", ">= 1.5.2"
   gem "rcov", ">= 0"
