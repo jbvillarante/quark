@@ -58,6 +58,35 @@ describe 'Quark::Session' do
     end
   end
 
+  describe "#adjust_resource_for_sandbox" do
+    context "when sandbox is true" do
+      before do
+        @session = Quark::Session.new(api_key: @api_key, api_secret: @api_secret, session_key: @session_key, uid: '43169473', sandbox: true)
+      end
+
+      it "replaces 'wallet/' with 'wallet-sandbox/' in resource" do
+        data = {resource: 'wallet/commit'}
+        @session.send(:adjust_resource_for_sandbox, data)
+        data[:resource].should == 'wallet-sandbox/commit'
+      end
+
+      it "does not modify resource if resource is not 'wallet/'" do
+        data = {resource: 'application/friends'}
+        @session.send(:adjust_resource_for_sandbox, data)
+        data[:resource].should == 'application/friends'
+      end
+    end
+
+    context "when sandbox is false" do
+      it "does not modify 'wallet/' in resource" do
+        data = {resource: 'wallet/commit'}
+        session = Quark::Session.new(api_key: @api_key, api_secret: @api_secret, session_key: @session_key, uid: '43169473', sandbox: false)
+        session.send(:adjust_resource_for_sandbox, data)
+        data[:resource].should == 'wallet/commit'
+      end
+    end
+  end
+
   describe 'parameter validation' do
     before :each do 
       @arguments = {
@@ -242,7 +271,6 @@ describe 'Quark::Session' do
         session.user([123, '888', 777])
       end
     end
-
   end
   
   describe 'User Direct API Calls' do
@@ -296,7 +324,19 @@ describe 'Quark::Session' do
         response.headers.should_not include('text/xml')
         uid = JSON.parse(response.body_str)['user']['uid']
         uid.should == session.uid
-      end    
+      end
+
+      it "does not rename wallet resources when not in sandbox mode" do
+        Quark::SignedRequest.should_receive(:get).with(anything, 'wallet/balance', anything, anything)
+        session = Quark::Session.new(@arguments)
+        session.get(:resource => 'wallet/balance', :params => {:format => 'json'})
+      end
+
+      it "renames wallet resources if in sandbox mode" do
+        Quark::SignedRequest.should_receive(:get).with(anything, 'wallet-sandbox/balance', anything, anything)
+        session = Quark::Session.new(@arguments.merge(sandbox: true))
+        session.get(:resource => 'wallet/balance', :params => {:format => 'json'})
+      end
     end
     
     describe 'POST methods' do
@@ -326,7 +366,19 @@ describe 'Quark::Session' do
         response.headers.should_not include('text/xml')
         status = JSON.parse(response.body_str)
         status.should == ['updated']
-      end    
+      end
+
+      it "does not rename wallet resources when not in sandbox mode" do
+        Quark::SignedRequest.should_receive(:post).with(anything, 'wallet/commit', anything, anything)
+        session = Quark::Session.new(@arguments)
+        session.post(:resource => 'wallet/commit', :params => {:format => 'json'})
+      end
+
+      it "renames wallet resources if in sandbox mode" do
+        Quark::SignedRequest.should_receive(:post).with(anything, 'wallet-sandbox/commit', anything, anything)
+        session = Quark::Session.new(@arguments.merge(sandbox: true))
+        session.post(:resource => 'wallet/commit', :params => {:format => 'json'})
+      end
     end
     
     describe 'PUT methods' do
@@ -363,6 +415,18 @@ describe 'Quark::Session' do
         status = JSON.parse(response.body_str)['status']
         status.should == 'SUCCESS'
       end    
+
+      it "does not rename wallet resources when not in sandbox mode" do
+        Quark::SignedRequest.should_receive(:put).with(anything, 'wallet/balance', anything, anything)
+        session = Quark::Session.new(@arguments)
+        session.put(:resource => 'wallet/balance', :params => {:format => 'json'})
+      end
+
+      it "renames wallet resources if in sandbox mode" do
+        Quark::SignedRequest.should_receive(:put).with(anything, 'wallet-sandbox/balance', anything, anything)
+        session = Quark::Session.new(@arguments.merge(sandbox: true))
+        session.put(:resource => 'wallet/balance', :params => {:format => 'json'})
+      end
     end
     
   end

@@ -9,7 +9,8 @@ module Quark
 
     def initialize(params)
       @settings = {
-        :endpoint => 'http://api.friendster.com/v1'
+        :endpoint => 'http://api.friendster.com/v1',
+        :sandbox => false
       }.merge(params)
 
       [ :api_key, :api_secret, :session_key, :uid ].each do |required|
@@ -66,18 +67,25 @@ module Quark
     end
       
     def get(data)
+      adjust_resource_for_sandbox(data)
       Quark::SignedRequest.get(endpoint, data[:resource], @settings[:api_secret], :params => build_params(data[:params]))
     end
     
     def post(data)
+      adjust_resource_for_sandbox(data)
       Quark::SignedRequest.post(endpoint, data[:resource], @settings[:api_secret], :params => build_params(data[:params]))
     end
     
     def put(data)
+      adjust_resource_for_sandbox(data)
       Quark::SignedRequest.put(endpoint, data[:resource], @settings[:api_secret], :params => build_params(data[:params]))
     end
     
     private
+
+    def adjust_resource_for_sandbox(data)
+      data[:resource].gsub!("wallet/", "wallet-sandbox/") if @settings[:sandbox]
+    end
 
     def build_params(options)
       options ||= {}

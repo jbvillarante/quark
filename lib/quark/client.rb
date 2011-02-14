@@ -4,7 +4,8 @@ module Quark
   class Client
     def initialize(params)
       @settings = {
-        :endpoint => 'http://api.friendster.com/v1'
+        :endpoint => 'http://api.friendster.com/v1',
+        :sandbox => false
       }.merge(params)
 
       raise ArgumentError, 'Missing required parameter: api_key' if @settings[:api_key] == nil
@@ -38,7 +39,7 @@ module Quark
     end
 
     def create_session(params)
-      Quark::Session.new(:api_key => @settings[:api_key], :api_secret => @settings[:api_secret], :endpoint => @settings[:endpoint], :session_key => params[:session_key], :uid => params[:uid])
+      Quark::Session.new(:api_key => @settings[:api_key], :api_secret => @settings[:api_secret], :endpoint => @settings[:endpoint], :session_key => params[:session_key], :uid => params[:uid], :sandbox => @settings[:sandbox])
     end
   end
 end
