@@ -11,6 +11,7 @@ module Quark
       raise Quark::InvalidSignatureError if params[:sig] != Quark::Util.signature(callback_url, secret_key, params)
       args = { api_secret: secret_key, api_key: params[:api_key], session_key: params[:session_key], uid: params[:user_id] }
       args.merge!(endpoint: "http://#{params[:api_domain]}/v1") if params.has_key?(:api_domain)
+      args.merge!(sandbox: !!params[:sandbox]) if params.has_key?(:sandbox)
       Session.new(args)
     end
 

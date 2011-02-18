@@ -64,6 +64,12 @@ describe 'Quark::Session' do
       session.endpoint.should == "http://api.friendster.com/v1"
     end
 
+    it "creates a sandbox session when params includes sandbox: true" do
+      @params["sandbox"] = true
+      session = Quark::Session.from_friendster(@callback_url, @api_secret, @params)
+      session.instance_variable_get(:@settings)[:sandbox].should be_true
+    end
+
     context "when signature is invalid" do
       it "raises an error" do
         expect do
