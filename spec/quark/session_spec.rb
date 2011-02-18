@@ -55,6 +55,15 @@ describe 'Quark::Session' do
       session.instance_variable_get(:@settings)[:api_key].should == @api_key
     end
 
+    it "defaults endpoint to http://api.friendster.com/v1 when no api_domain given" do
+      @params.delete(:api_domain)
+      @params.delete(:sig)
+      @params.merge!(signed_keys: (@params.keys + [:signed_keys]).join(','))
+      @params.merge!(sig: Quark::Util.signature(@callback_url, @api_secret, @params))
+      session = Quark::Session.from_friendster(@callback_url, @api_secret, @params)
+      session.endpoint.should == "http://api.friendster.com/v1"
+    end
+
     context "when signature is invalid" do
       it "raises an error" do
         expect do
