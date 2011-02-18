@@ -4,7 +4,8 @@ module Quark
   class Session
     def self.from_friendster(callback_url, secret_key, params)
       raise Quark::InvalidSignatureError if params[:sig] != Quark::Util.signature(callback_url, secret_key, params)
-      Session.new(api_secret: secret_key, api_key: params[:api_key], session_key: params[:session_key], uid: params[:user_id], endpoint: params[:endpoint])
+      endpoint = "http://#{params[:api_domain]}/v1"
+      Session.new(api_secret: secret_key, api_key: params[:api_key], session_key: params[:session_key], uid: params[:user_id], endpoint: endpoint)
     end
 
     def initialize(params)

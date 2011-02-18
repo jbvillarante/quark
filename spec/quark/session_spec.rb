@@ -11,7 +11,7 @@ describe 'Quark::Session' do
   describe ".from_friendster" do
     before do
       @callback_url = "http://example.com/callback"
-      @endpoint = "http://some.endpoint.at.friendster.com/v1"
+      @api_domain = "some.api_domain.at.friendster.com"
       @params = {
               :api_key      => @api_key,
               :expires      => 0,
@@ -21,7 +21,7 @@ describe 'Quark::Session' do
               :session_key  => @session_key,
               :src          => "canvas",
               :user_id      => 2,
-              :endpoint     => @endpoint
+              :api_domain   => @api_domain
       }
       @params.merge!(signed_keys: (@params.keys + [:signed_keys]).join(','))
       @params.merge!(sig: Quark::Util.signature(@callback_url, @api_secret, @params))
@@ -45,7 +45,7 @@ describe 'Quark::Session' do
       end
 
       it "with specified endpoint" do
-        @session.endpoint.should == @endpoint
+        @session.endpoint.should == "http://#{@api_domain}/v1"
       end
     end
 
