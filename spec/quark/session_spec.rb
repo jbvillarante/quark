@@ -49,6 +49,12 @@ describe 'Quark::Session' do
       end
     end
 
+    it "handles params with string keys" do
+      @params["api_key"] = @params.delete(:api_key)
+      session = Quark::Session.from_friendster(@callback_url, @api_secret, @params)
+      session.instance_variable_get(:@settings)[:api_key].should == @api_key
+    end
+
     context "when signature is invalid" do
       it "raises an error" do
         expect do
