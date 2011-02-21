@@ -382,10 +382,79 @@ describe 'Quark::Session' do
           end
         end
       end
+
+      describe "#wallet_create" do
+        before do
+          @uid = 100
+          @coins = 2000
+        end
+
+        def do_request
+          @session = Quark::Session.new(@arguments)
+          wallet_params = {:coins => @coins, :wallet_key => 'wallet'}
+          stub_response = {:body => test_data('wallet_create_response_valid.json')}
+          stub_request(:post, %r{/wallet-sandbox/create/100}).with(:params => {:format => 'json'}.merge(wallet_params)).to_return(stub_response)
+        end
+
+        context "non-sandbox mode" do
+          it "returns the uid, coins, and timestamp via /wallet-sandbox/create API method" do
+            do_request
+            wallet = @session.wallet_create(@uid, @coins)
+            wallet['uid'].should == @uid.to_s
+            wallet['coins'].should == @coins
+            wallet['timestamp'].should == "2011-02-21T11:40:15+08:00"
+          end
+        end
+
+        context "sandbox mode" do
+          it "returns the uid, coins, and timestamp via /wallet-sandbox/create API method" do
+            @arguments.merge!(:sandbox => true)
+            do_request
+
+            wallet = @session.wallet_create(@uid, @coins)
+            wallet['uid'].should == @uid.to_s
+            wallet['coins'].should == @coins
+            wallet['timestamp'].should == "2011-02-21T11:40:15+08:00"
+          end
+        end
+      end
+
+      describe "#wallet_destroy" do
+        before do
+          @uid = 100
+          @coins = 55
+        end
+
+        def do_request
+          @session = Quark::Session.new(@arguments)
+          stub_response = {:body => test_data('wallet_destroy_response_valid.json')}
+          stub_request(:post, %r{/wallet-sandbox/destroy/100}).with(:params => {:format => 'json'}).to_return(stub_response)
+        end
+
+        context "non-sandbox mode" do
+          it "returns the uid, coins, and timestamp via /wallet-sandbox/destroy API method" do
+            do_request
+
+            wallet = @session.wallet_destroy(@uid)
+            wallet['uid'].should == @uid
+            wallet['coins'].should == @coins
+            wallet['timestamp'].should == "2011-02-21T12:25:19+08:00"
+          end
+        end
+
+        context "sandbox mode" do
+          it "returns the uid, coins, and timestamp via /wallet-sandbox/destroy API method" do
+            @arguments.merge!(:sandbox => true)
+            do_request
+
+            wallet = @session.wallet_destroy(@uid)
+            wallet['uid'].should == @uid
+            wallet['coins'].should == @coins
+            wallet['timestamp'].should == "2011-02-21T12:25:19+08:00"
+          end
+        end
+      end
     end
-
-
-
   end
   
   describe 'User Direct API Calls' do

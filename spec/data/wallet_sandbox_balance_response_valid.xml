@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wallet_response xmlns="http://api.friendster.com/v1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://api.friendster.com/v1/ http://api.friendster.com/v1/friendster.xsd">
-<coins>200000</coins>
-<timestamp>2011-02-21T09:53:44+08:00</timestamp>
-</wallet_response>

@@ -89,6 +89,16 @@ module Quark
       JSON.parse(response.body_str)
     end
 
+    def wallet_destroy(uid)
+      response = post(:resource => "wallet-sandbox/destroy/#{uid}")
+      JSON.parse(response.body_str)
+    end
+
+    def wallet_create(uid, coins)
+      response = post(:resource => "wallet-sandbox/create/#{uid}", :params => {:coins => coins, :wallet_key => "wallet"})
+      JSON.parse(response.body_str)
+    end
+
     def get(data)
       adjust_resource_for_sandbox(data)
       Quark::SignedRequest.get(endpoint, data[:resource], @settings[:api_secret], :params => build_params(data[:params]))
