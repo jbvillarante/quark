@@ -73,7 +73,22 @@ module Quark
       response = get(:resource => resource)
       JSON.parse(response.body_str)['user']
     end
-      
+
+    def wallet_balance
+      response = get(:resource => "wallet/balance")
+      JSON.parse(response.body_str)['coins']
+    end
+
+    def wallet_payment(data)
+      response = post(:resource => "wallet/payment", :params => data)
+      JSON.parse(response.body_str)
+    end
+
+    def wallet_commit(request_token)
+      response = post(:resource => "wallet/commit", :params => {:request_token => request_token})
+      JSON.parse(response.body_str)
+    end
+
     def get(data)
       adjust_resource_for_sandbox(data)
       Quark::SignedRequest.get(endpoint, data[:resource], @settings[:api_secret], :params => build_params(data[:params]))
@@ -88,7 +103,7 @@ module Quark
       adjust_resource_for_sandbox(data)
       Quark::SignedRequest.put(endpoint, data[:resource], @settings[:api_secret], :params => build_params(data[:params]))
     end
-    
+
     private
 
     def adjust_resource_for_sandbox(data)

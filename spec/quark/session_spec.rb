@@ -292,6 +292,100 @@ describe 'Quark::Session' do
         session.user([123, '888', 777])
       end
     end
+
+    context "Wallet Convenience API calls" do
+      describe "#wallet_balance" do
+        context "non-sandbox mode" do
+          it "retrieve the wallet balance of the user via /wallet/balance API method" do
+            session = Quark::Session.new(@arguments)
+            stub_response = {:body => test_data('wallet_balance_response_valid.json')}
+            stub_request(:get, %r{/wallet/balance}).with(:params => {:format => 'json'}).to_return(stub_response)
+
+            session.wallet_balance.should_not be_nil
+            session.wallet_balance.should == 300
+          end
+        end
+
+        context "sandbox mode" do
+          it "retrieves the wallet balance of the user via /wallet-sandbox/balance API method" do
+            @arguments.merge!(:sandbox => true)
+            session = Quark::Session.new(@arguments)
+            stub_response = {:body => test_data('wallet_sandbox_balance_response_valid.json')}
+            stub_request(:get, %r{/wallet-sandbox/balance}).with(:params => {:format => 'json'}).to_return(stub_response)
+
+            session.wallet_balance.should_not be_nil
+            session.wallet_balance.should == 200000
+          end
+        end
+      end
+
+      describe "#wallet_payment" do
+        before do
+          @payment_params = {:name => "test product", :description => "test product description", :amt => 50}
+        end
+
+        context "non-sandbox mode" do
+          it "returns the token and return_url via /wallet/payment API method" do
+            session = Quark::Session.new(@arguments)
+            stub_response = {:body => test_data('wallet_payment_response_valid.json')}
+            stub_request(:post, %r{/wallet/payment}).with(:params => {:format => 'json'}.merge(@payment_params)).to_return(stub_response)
+
+            wallet_payment = session.wallet_payment(@payment_params)
+            wallet_payment['redirect_url'].should == "http://test.host/wallet/authenticate"
+            wallet_payment['request_token'].should == "db281ea2c2344d19310b23b762778f"
+          end
+        end
+
+        context "sandbox mode" do
+          it "returns the token and return_url via /wallet-sandbox/payment API method" do
+            @arguments.merge!(:sandbox => true)
+            session = Quark::Session.new(@arguments)
+            stub_response = {:body => test_data('wallet_sandbox_payment_response_valid.json')}
+            stub_request(:post, %r{/wallet-sandbox/payment}).with(:params => {:format => 'json'}.merge(@payment_params)).to_return(stub_response)
+
+            wallet_payment = session.wallet_payment(@payment_params)
+            wallet_payment['redirect_url'].should == "http://test.host/wallet/authenticate"
+            wallet_payment['request_token'].should == "bd281ea2c2344d19310b23b762772a"
+          end
+        end
+      end
+
+      describe "#wallet_commit" do
+        before do
+          @payment_token = "db281ea2c2344d19310b23b762778f"
+        end
+
+        context "non-sandbox mode" do
+          it "returns the amt, transaction_id and timestamp via /wallet/commit API method" do
+            session = Quark::Session.new(@arguments)
+            stub_response = {:body => test_data('wallet_commit_response_valid.json')}
+            stub_request(:post, %r{/wallet/commit}).with(:params => {:format => 'json'}.merge({:request_token => @payment_token})).to_return(stub_response)
+
+            wallet_commit = session.wallet_commit(@payment_token)
+            wallet_commit['amt'].should == "20"
+            wallet_commit['transaction_id'].should == "14414efdc3c66457af4d"
+            wallet_commit['timestamp'].should == "2011-02-21T11:13:25+08:00"
+          end
+        end
+
+        context "sandbox mode" do
+          it "returns the amt, transaction_id and timestamp via /wallet-sandbox/commit API method" do
+            @arguments.merge!(:sandbox => true)
+            session = Quark::Session.new(@arguments)
+            stub_response = {:body => test_data('wallet_sandbox_commit_response_valid.json')}
+            stub_request(:post, %r{/wallet-sandbox/commit}).with(:params => {:format => 'json'}.merge({:request_token => @payment_token})).to_return(stub_response)
+
+            wallet_commit = session.wallet_commit(@payment_token)
+            wallet_commit['amt'].should == "200"
+            wallet_commit['transaction_id'].should == "9a414efdc3c66457af4d"
+            wallet_commit['timestamp'].should == "2011-09-21T11:13:25+08:00"
+          end
+        end
+      end
+    end
+
+
+
   end
   
   describe 'User Direct API Calls' do
