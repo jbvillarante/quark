@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{quark}
-  s.version = "0.3.6"
+  s.version = "0.3.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Anna Marseille D. Gabutero <agabutero@friendster.com>", "Andro Salinas <asalinas@friendster.com>", "Zander Magtipon <amagtipon@friendster.com>", "Arzumy MD <arzumy@mol.com>", "Paolo Alexis Falcone <pfalcone@friendster.com>"]
