@@ -22,7 +22,7 @@ Jeweler::Tasks.new do |gem|
   gem.summary = %Q{Friendster v1 API wrapper}
   gem.description = %Q{Quark encapsulates Friendster API v1 for Project Neutron.}
   gem.email = "release@friendster.com"
-  gem.authors = ["Anna Marseille D. Gabutero <agabutero@friendster.com>", "Andro Salinas <asalinas@friendster.com>", "Zander Magtipon <amagtipon@friendster.com>"]
+  gem.authors = ["Anna Marseille D. Gabutero <agabutero@friendster.com>", "Andro Salinas <asalinas@friendster.com>", "Zander Magtipon <amagtipon@friendster.com>", "Arzumy MD <arzumy@mol.com>", "Paolo Alexis Falcone <pfalcone@friendster.com>"]
 end
 
 Jeweler::RubygemsDotOrgTasks.new

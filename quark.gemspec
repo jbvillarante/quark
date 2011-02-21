@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{quark}
-  s.version = "0.3.5"
+  s.version = "0.3.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Anna Marseille D. Gabutero <agabutero@friendster.com>", "Andro Salinas <asalinas@friendster.com>", "Zander Magtipon <amagtipon@friendster.com>"]
-  s.date = %q{2011-02-18}
+  s.authors = ["Anna Marseille D. Gabutero <agabutero@friendster.com>", "Andro Salinas <asalinas@friendster.com>", "Zander Magtipon <amagtipon@friendster.com>", "Arzumy MD <arzumy@mol.com>", "Paolo Alexis Falcone <pfalcone@friendster.com>"]
+  s.date = %q{2011-02-21}
   s.description = %q{Quark encapsulates Friendster API v1 for Project Neutron.}
   s.email = %q{release@friendster.com}
   s.extra_rdoc_files = [
@@ -49,6 +49,14 @@ Gem::Specification.new do |s|
     "spec/data/token_response_valid.json",
     "spec/data/user_response_valid.json",
     "spec/data/user_response_valid.xml",
+    "spec/data/wallet_balance_response_valid.json",
+    "spec/data/wallet_commit_response_valid.json",
+    "spec/data/wallet_create_response_valid.json",
+    "spec/data/wallet_destroy_response_valid.json",
+    "spec/data/wallet_payment_response_valid.json",
+    "spec/data/wallet_sandbox_balance_response_valid.json",
+    "spec/data/wallet_sandbox_commit_response_valid.json",
+    "spec/data/wallet_sandbox_payment_response_valid.json",
     "spec/helper.rb",
     "spec/quark/client_spec.rb",
     "spec/quark/request_spec.rb",
