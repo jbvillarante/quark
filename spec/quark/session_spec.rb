@@ -615,4 +615,19 @@ describe 'Quark::Session' do
     
   end
 
+  describe '#generate_wallet_authenticate_url' do
+    before do
+      @session = Quark::Session.new(api_key: @api_key, api_secret: @api_secret, session_key: @session_key, uid: '43169473')
+    end
+
+    it "generates a signed URL" do
+      signed_url = @session.generate_wallet_authenticate_url("http://example.com/authenticate", "123")
+      signed_url.should == "http://example.com/authenticate?request_token=123&api_key=#{@api_key}&signed_keys=api_key%2Crequest_token%2Csigned_keys&sig=173b63d810cf44a46da4cfc7d7ed73bd"
+    end
+
+    it "generates a signed URL" do
+      signed_url = @session.generate_wallet_authenticate_url("http://example.com/authenticate", "123", "http://example.org/return_to_me")
+      signed_url.should == "http://example.com/authenticate?request_token=123&api_key=#{@api_key}&return_url=http%3A%2F%2Fexample.org%2Freturn_to_me&signed_keys=api_key%2Crequest_token%2Creturn_url%2Csigned_keys&sig=11198d6a87d740d7e581ef897f206fd9"
+    end
+  end
 end

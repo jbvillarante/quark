@@ -99,6 +99,14 @@ module Quark
       JSON.parse(response.body_str)
     end
 
+    def generate_wallet_authenticate_url(redirect_url, token, return_url=nil)
+      params = { request_token: token, api_key: @settings[:api_key] }
+      params.merge!(return_url: return_url) unless return_url.nil?
+      params[:signed_keys] = (params.keys.sort + [:signed_keys]).join(',')
+      sig = Quark::Util.signature(redirect_url, @settings[:api_secret], params)
+      "#{redirect_url}?#{params.map { |k, v| "#{k}=#{URI.encode_www_form_component(v)}" }.join('&')}&sig=#{sig}"
+    end
+
     def get(data)
       adjust_resource_for_sandbox(data)
       Quark::SignedRequest.get(endpoint, data[:resource], @settings[:api_secret], :params => build_params(data[:params]))
