@@ -39,7 +39,7 @@ module Quark
     end
 
     def create_session(params)
-      Quark::Session.new(:api_key => @settings[:api_key], :api_secret => @settings[:api_secret], :endpoint => @settings[:endpoint], :session_key => params[:session_key], :uid => params[:uid], :sandbox => @settings[:sandbox])
+      Quark::Session.new(@settings.merge(:session_key => params[:session_key], :uid => params[:uid]))
     end
   end
 end

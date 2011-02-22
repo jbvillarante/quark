@@ -1,6 +1,6 @@
-require 'helper'
+require 'spec_helper'
 
-describe 'Quark::UnsignedRequest' do
+describe Quark::UnsignedRequest do
   before :each do
     @api_key = '718fb34497589503915e85470d9d5511'
     @api_secret = 'b39c091ea8bb895345f652cc3217a1cf'
@@ -40,9 +40,57 @@ describe 'Quark::UnsignedRequest' do
       response = Quark::UnsignedRequest.get(@default_endpoint, resource, :params => { :api_key => @api_key } )
     }.should raise_error
   end
+
+  describe "passing options to Curl" do
+    let(:curl) { double }
+
+    before do
+      curl.stub(:response_code) { 200 }
+      curl.stub(:http) { curl }
+      Curl::Easy.should_receive(:new) { curl }
+    end
+
+    context "for a GET request" do
+      it "should pass arbitrary options to Curl" do
+        curl.should_receive(:ssl_verify_host=).with(false)
+        Quark::UnsignedRequest.get(@default_endpoint, '/anything', :params => { :api_key => @api_key }, :curl_options => { :ssl_verify_host => false })
+      end
+    end
+
+    context "for a POST request" do
+      before do
+        curl.should_receive(:post_body=)
+      end
+
+      it "should always set the post_data" do
+        Quark::UnsignedRequest.post(@default_endpoint, '/anything', :params => { :api_key => @api_key })
+      end
+
+      it "should pass arbitrary options to Curl" do
+        curl.should_receive(:any_old_thing=).with('good times!')
+        Quark::UnsignedRequest.post(@default_endpoint, '/anything', :params => { :api_key => @api_key }, :curl_options => { :any_old_thing => 'good times!' })
+      end
+    end
+
+    context "for a PUT request" do
+      before do
+        curl.should_receive(:headers=).with('Content-Type' => 'application/x-www-form-urlencoded')
+        curl.should_receive(:put_data=).with('api_key=718fb34497589503915e85470d9d5511')
+      end
+
+      it "should always set the headers and put_data" do
+        Quark::UnsignedRequest.put(@default_endpoint, '/anything', :params => { :api_key => @api_key })
+      end
+
+      it "should pass arbitrary options to Curl" do
+        curl.should_receive(:any_old_thing=).with('good times!')
+        Quark::UnsignedRequest.put(@default_endpoint, '/anything', :params => { :api_key => @api_key }, :curl_options => { :any_old_thing => 'good times!' })
+      end
+    end
+  end
 end
 
-describe 'Quark::SignedRequest' do
+describe Quark::SignedRequest do
   before :each do
     @api_key = '718fb34497589503915e85470d9d5511'
     @api_secret = 'b39c091ea8bb895345f652cc3217a1cf'
@@ -78,7 +126,7 @@ describe 'Quark::SignedRequest' do
   end
 end
 
-describe 'Quark::Exception' do
+describe Quark::Exception do
   context "when JSON is returned" do
     specify 'should return the error message when outputting the exception' do
       stub_request(:any, 'api.friendster.com').to_return(:status => 500, :headers => { 'Content-Type' =>  'application/json' }, :body => { :error_code => '100', :error_msg => 'Error Message' }.to_json)

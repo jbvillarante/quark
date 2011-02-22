@@ -10,7 +10,7 @@ module Quark
 
       raise Quark::InvalidSignatureError if params[:sig] != Quark::Util.signature(callback_url, secret_key, params)
       args = { api_secret: secret_key, api_key: params[:api_key], session_key: params[:session_key], uid: params[:user_id] }
-      args.merge!(endpoint: "http://#{params[:api_domain]}/v1") if params.has_key?(:api_domain)
+      args.merge!(endpoint: "https://#{params[:api_domain]}/v1") if params.has_key?(:api_domain)
       args.merge!(sandbox: !!params[:sandbox]) if params.has_key?(:sandbox)
       Session.new(args)
     end
@@ -109,17 +109,17 @@ module Quark
 
     def get(data)
       adjust_resource_for_sandbox(data)
-      Quark::SignedRequest.get(endpoint, data[:resource], @settings[:api_secret], :params => build_params(data[:params]))
+      Quark::SignedRequest.get(endpoint, data[:resource], @settings[:api_secret], build_request_options(data[:params]))
     end
     
     def post(data)
       adjust_resource_for_sandbox(data)
-      Quark::SignedRequest.post(endpoint, data[:resource], @settings[:api_secret], :params => build_params(data[:params]))
+      Quark::SignedRequest.post(endpoint, data[:resource], @settings[:api_secret], build_request_options(data[:params]))
     end
     
     def put(data)
       adjust_resource_for_sandbox(data)
-      Quark::SignedRequest.put(endpoint, data[:resource], @settings[:api_secret], :params => build_params(data[:params]))
+      Quark::SignedRequest.put(endpoint, data[:resource], @settings[:api_secret], build_request_options(data[:params]))
     end
 
     private
@@ -128,14 +128,19 @@ module Quark
       data[:resource].gsub!("wallet/", "wallet-sandbox/") if @settings[:sandbox]
     end
 
-    def build_params(options)
-      options ||= {}
-      {
+    def build_request_options(data)
+      options = {}
+      data ||= {}
+
+      options[:params] = {
         :api_key => @settings[:api_key],
         :session_key => session_key,
         :nonce => "#{Time.now.to_f}", 
         :format => 'json'
-      }.merge(options)
+      }.merge(data)
+
+      options[:curl_options] = @settings[:curl_options] if @settings[:curl_options]
+      options
     end
   end
 end

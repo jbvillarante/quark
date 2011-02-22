@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{quark}
-  s.version = "0.3.7"
+  s.version = "0.3.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Anna Marseille D. Gabutero <agabutero@friendster.com>", "Andro Salinas <asalinas@friendster.com>", "Zander Magtipon <amagtipon@friendster.com>", "Arzumy MD <arzumy@mol.com>", "Paolo Alexis Falcone <pfalcone@friendster.com>"]
-  s.date = %q{2011-02-21}
+  s.date = %q{2011-02-22}
   s.description = %q{Quark encapsulates Friendster API v1 for Project Neutron.}
   s.email = %q{release@friendster.com}
   s.extra_rdoc_files = [
@@ -57,10 +57,10 @@ Gem::Specification.new do |s|
     "spec/data/wallet_sandbox_balance_response_valid.json",
     "spec/data/wallet_sandbox_commit_response_valid.json",
     "spec/data/wallet_sandbox_payment_response_valid.json",
-    "spec/helper.rb",
     "spec/quark/client_spec.rb",
     "spec/quark/request_spec.rb",
-    "spec/quark/session_spec.rb"
+    "spec/quark/session_spec.rb",
+    "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://github.com/friendster/quark}
   s.licenses = ["Proprietary"]
@@ -68,10 +68,10 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Friendster v1 API wrapper}
   s.test_files = [
-    "spec/helper.rb",
     "spec/quark/client_spec.rb",
     "spec/quark/request_spec.rb",
-    "spec/quark/session_spec.rb"
+    "spec/quark/session_spec.rb",
+    "spec/spec_helper.rb"
   ]
 
   if s.respond_to? :specification_version then

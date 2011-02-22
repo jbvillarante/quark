@@ -1,4 +1,4 @@
-require 'helper'
+require 'spec_helper'
 
 describe 'Quark::Session' do
   before :each do
@@ -45,7 +45,7 @@ describe 'Quark::Session' do
       end
 
       it "with specified endpoint" do
-        @session.endpoint.should == "http://#{@api_domain}/v1"
+        @session.endpoint.should == "https://#{@api_domain}/v1"
       end
     end
 
@@ -157,8 +157,21 @@ describe 'Quark::Session' do
       client = Quark::Session.new(@arguments)
       client.endpoint.should == @default_endpoint
     end
+
+    describe 'passing options to Curl' do
+      before do
+        Quark::UnsignedRequest.should_receive(:get) do |endpoint, resource, options|
+          options[:curl_options].should == { :any_curl_option => 'yes' }
+        end
+      end
+
+      it "should pass the session Curl options when making network calls" do
+        session = Quark::Session.new(@arguments.merge(:curl_options => { :any_curl_option => 'yes' }))
+        session.get(:resource => 'anything')
+      end
+    end
   end
-  
+
   describe 'User Convenience API Calls' do
   
     before :each do 

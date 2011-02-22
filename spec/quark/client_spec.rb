@@ -1,4 +1,4 @@
-require 'helper'
+require 'spec_helper'
 
 describe 'Quark::Client' do
   before :each do
@@ -47,13 +47,22 @@ describe 'Quark::Client' do
     session.uid.should == uid
   end
 
-  specify 'can accept a session key and UID directly' do
-    session_key = 'foo'
-    uid = 18236912940
-    client = Quark::Client.new(:api_key => @api_key, :api_secret => @api_secret)
-    session = client.create_session(:session_key => session_key, :uid => uid)
-    session.session_key.should == session_key
-    session.uid.should == uid
+  describe '#create_session' do
+    let(:session_key) { 'foo' }
+    let(:uid) { 18236912940 }
+
+    it 'create a session with a session key and UID' do
+      client = Quark::Client.new(:api_key => @api_key, :api_secret => @api_secret)
+      session = client.create_session(:session_key => session_key, :uid => uid)
+      session.session_key.should == session_key
+      session.uid.should == uid
+    end
+
+    specify 'passes curl_options to the session' do
+      client = Quark::Client.new(:api_key => @api_key, :api_secret => @api_secret, :curl_options => { :any_curl_option => true })
+      session = client.create_session(:session_key => session_key, :uid => uid)
+      session.instance_variable_get(:@settings)[:curl_options].should == { :any_curl_option => true }
+    end
   end
 
   describe 'create_session_from_token' do

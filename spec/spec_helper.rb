@@ -12,7 +12,6 @@ require 'quark'
 require 'webmock/rspec'
 
 RSpec.configure do |config|
-  config.before(:each) {}
 end
 
 def test_data(file_name)

@@ -29,27 +29,46 @@ module Quark
   end
 
   class UnsignedRequest
+    attr_reader :curl
+
+    def initialize(url, options={})
+      @curl = Curl::Easy.new(url)
+      options.each do |curl_option, curl_option_value|
+        curl.send("#{curl_option}=", curl_option_value)
+      end
+    end
+
     def self.post(endpoint, resource, options)
-      post_data = options[:params].map{|key, value| Curl::PostField.content(key.to_s, value)}
-      check_for_errors(Curl::Easy.http_post("#{endpoint}/#{resource}", post_data))
+      curl_options = {
+        :post_body => urlencoded_params(options[:params])
+      }.merge(options[:curl_options] || {})
+      request = new("#{endpoint}/#{resource}", curl_options)
+      request.http(:POST)
     end
 
     def self.get(endpoint, resource, options)
-      get_params = options[:params].map{|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v)}"}.join('&')
-      check_for_errors(Curl::Easy.http_get("#{endpoint}/#{resource}?#{get_params}"))
+      request = new("#{endpoint}/#{resource}?#{urlencoded_params(options.delete(:params))}", options[:curl_options] || {})
+      request.http(:GET)
     end
     
     def self.put(endpoint, resource, options)
-      put_data = options[:params].map{|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v)}"}.join('&')
-      check_for_errors(Curl::Easy.http_put("#{endpoint}/#{resource}", put_data){|c| c.headers['Content-Type'] = 'application/x-www-form-urlencoded'})
+      curl_options = {
+        :headers => { 'Content-Type' => 'application/x-www-form-urlencoded' },
+        :put_data => urlencoded_params(options[:params])
+      }.merge(options[:curl_options] || {})
+      request = new("#{endpoint}/#{resource}", curl_options)
+      request.http(:PUT)
     end
 
-    def self.check_for_errors(response)
-      if response.response_code == 200
-        response
-      else
-        raise Quark::Exception.new(response)
-      end
+    def http(verb)
+      curl.http(verb)
+      curl.response_code == 200 ? curl : raise(Quark::Exception.new(curl))
+    end
+
+    private
+
+    def self.urlencoded_params(params)
+      params.map{|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}"}.join('&')
     end
   end
 
