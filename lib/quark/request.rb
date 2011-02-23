@@ -1,4 +1,5 @@
 require 'curb'
+require 'nokogiri'
 require 'cgi'
 require 'digest/md5'
 
