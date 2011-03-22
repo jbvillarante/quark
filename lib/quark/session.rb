@@ -56,11 +56,6 @@ module Quark
       JSON.parse(response.body_str)['photo']
     end
 
-    def friends(user_id)
-      response = get(:resource => "friends/#{user_id}")
-      JSON.parse(response.body_str)['friends']
-    end
-    
     def primary_photo
       response = get(:resource => "primaryphoto/#{uid}")
       JSON.parse(response.body_str)['photo']
@@ -77,6 +72,12 @@ module Quark
       end
       response = get(:resource => resource)
       JSON.parse(response.body_str)['user']
+    end
+
+    def friends(user_id = nil)
+      resource = user_id.nil? ? "friends" : "friends/#{user_id}"
+      response = get(:resource => resource)
+      JSON.parse(response.body_str)['friends']['uid']
     end
 
     def wallet_balance

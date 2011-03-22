@@ -196,22 +196,6 @@ describe 'Quark::Session' do
       end
     end
 
-    describe '/friends' do
-      specify "should retrieve the list of friends given a user ID" do
-        user_id = '9017'
-        stub_request(:get, %r{/friends}).with(params: { uid: user_id }).to_return(body: test_data('friends_response_valid.json'))
-
-        session = Quark::Session.new(@arguments)
-        friends = session.friends(user_id)
-        friends.should_not be_empty
-        friends['uid'].should be_an Array
-        friends['uid'].each do |f|
-          f.should be_a Fixnum
-        end
-      end
-    end
-
-    
     describe '/photos' do
       specify "should retrieve the list of photos in a specific album" do
         album_id = '709277604'
@@ -303,7 +287,7 @@ describe 'Quark::Session' do
           "favorites",
           "about_me",
           "want_to_meet",
-          "birthday"].each {|key| user_info.has_key?(key).should be_true }
+          "birthday"].each { |key| user_info.should have_key(key) }
       end
 
       it "should retrieve user info using a user_id (as Integer)" do
@@ -319,6 +303,26 @@ describe 'Quark::Session' do
       it "should retrieve user info using an array of user ids" do
         stub_request(:get, %r{/user/123,888,777}).to_return(stub_response)
         session.user([123, '888', 777])
+      end
+    end
+
+    describe "#friends" do
+      let(:session) { Quark::Session.new(@arguments) }
+      let(:stub_response) { { :body => test_data('friends_response_valid.json') } }
+
+      it "returns a list of friend IDs" do
+        stub_request(:get, %r{/friends}).with(:params => { :format => 'json' }).to_return(stub_response)
+        session.friends.should == JSON.parse(stub_response[:body])['friends']['uid']
+      end
+
+      it "accepts a user_id parameter (as Integer)" do
+        stub_request(:get, %r{/friends/123}).with(:params => {:format => 'json'}).to_return(stub_response)
+        session.friends(123)
+      end
+
+      it "accepts a user_id parameter (as String)" do
+        stub_request(:get, %r{/friends/123}).with(:params => {:format => 'json'}).to_return(stub_response)
+        session.friends('123')
       end
     end
 
