@@ -195,6 +195,22 @@ describe 'Quark::Session' do
         }
       end
     end
+
+    describe '/friends' do
+      specify "should retrieve the list of friends given a user ID" do
+        user_id = '9017'
+        stub_request(:get, %r{/friends}).with(params: { uid: user_id }).to_return(body: test_data('friends_response_valid.json'))
+
+        session = Quark::Session.new(@arguments)
+        friends = session.friends(user_id)
+        friends.should_not be_empty
+        friends['uid'].should be_an Array
+        friends['uid'].each do |f|
+          f.should be_a Fixnum
+        end
+      end
+    end
+
     
     describe '/photos' do
       specify "should retrieve the list of photos in a specific album" do

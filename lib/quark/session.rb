@@ -55,6 +55,11 @@ module Quark
       response = get(:resource => "photo/#{photo_id}")
       JSON.parse(response.body_str)['photo']
     end
+
+    def friends(user_id)
+      response = get(:resource => "friends/#{user_id}")
+      JSON.parse(response.body_str)['friends']
+    end
     
     def primary_photo
       response = get(:resource => "primaryphoto/#{uid}")
