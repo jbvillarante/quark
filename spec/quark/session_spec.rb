@@ -611,6 +611,13 @@ describe 'Quark::Session' do
           response.should == ["3448717", "4534334", "545434"]
         end
 
+        specify 'should accept a single number as a uid parameter' do
+          stub_request(:post, %r{/notification}).with(:params => {:format => 'json'}).to_return(:body => "\[\"3448717\"]")
+          session = Quark::Session.new(@arguments)
+          response = session.notification(3448717, 'test subject', 'test label', 'test content')
+          response.should == ["3448717"]
+        end
+
         specify 'should return XML format when specified' do
           stub_request(:post, %r{/notification}).with(:params => {:format => 'xml'}).to_return(:headers => {'Content-Type' => "text/xml"}, :body => test_data('post_notification_valid.xml'))
           session = Quark::Session.new(@arguments)

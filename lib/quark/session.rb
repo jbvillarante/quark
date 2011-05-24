@@ -106,7 +106,10 @@ module Quark
     end
 
     def notification(uids, subject, label, content, type =2)
-      response = post(:resource => "notification/#{uids.join(',')}", :params => {:subject => subject, :label => label, :content => content, :type => type})
+      uid_str = uids
+      uid_str = uids.join(',') if uids.is_a? Enumerable
+
+      response = post(:resource => "notification/#{uid_str}" , :params => {:subject => subject, :label => label, :content => content, :type => type})
       JSON.parse(response.body_str)
     end
 
