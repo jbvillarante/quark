@@ -596,6 +596,31 @@ describe 'Quark::Session' do
         session = Quark::Session.new(@arguments.merge(sandbox: true))
         session.post(:resource => 'wallet/commit', :params => {:format => 'json'})
       end
+
+      describe '#notification' do
+
+        let(:notification_params) { {:name=>"Sample Name", :label=>"Sample Label", :subject=>"Sample Subject", :type=> 2, :content => 'dummy data'} }
+        before do
+          @session = Quark::Session.new(api_key: @api_key, api_secret: @api_secret, session_key: @session_key, uid: '43169473')
+        end
+
+        specify 'should  call APIs directly and return the raw response' do
+          stub_request(:post, %r{/notification}).with(:params => {:format => 'json'}).to_return(:body => test_data('post_notification_valid.json'))
+          session = Quark::Session.new(@arguments)
+          response = session.notification(%w[3448717 4534334 545434], 'test subject', 'test label', 'test content')
+          response.should == ["3448717", "4534334", "545434"]
+        end
+
+        specify 'should return XML format when specified' do
+          stub_request(:post, %r{/notification}).with(:params => {:format => 'xml'}).to_return(:headers => {'Content-Type' => "text/xml"}, :body => test_data('post_notification_valid.xml'))
+          session = Quark::Session.new(@arguments)
+          response = session.post(:resource => 'notification/3448717,4534334,545434', :params => notification_params)
+          response.header_str.should include('text/xml')
+          notification = Nokogiri::XML(response.body_str).css('uid')
+          notification.map { |f| f.text}.should == ["3448717", "4534334", "545434"]
+        end
+
+      end
     end
     
     describe 'PUT methods' do
@@ -663,4 +688,6 @@ describe 'Quark::Session' do
       signed_url.should == "http://example.com/authenticate?request_token=123&api_key=#{@api_key}&return_url=http%3A%2F%2Fexample.org%2Freturn_to_me&signed_keys=api_key%2Crequest_token%2Creturn_url%2Csigned_keys&sig=11198d6a87d740d7e581ef897f206fd9"
     end
   end
+
+
 end

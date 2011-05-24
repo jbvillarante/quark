@@ -105,6 +105,11 @@ module Quark
       JSON.parse(response.body_str)
     end
 
+    def notification(uids, subject, label, content, type =2)
+      response = post(:resource => "notification/#{uids.join(',')}", :params => {:subject => subject, :label => label, :content => content, :type => type})
+      JSON.parse(response.body_str)
+    end
+
     def generate_wallet_authenticate_url(redirect_url, token, return_url=nil)
       params = { request_token: token, api_key: @settings[:api_key] }
       params.merge!(return_url: return_url) unless return_url.nil?
