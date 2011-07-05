@@ -45,7 +45,7 @@ describe 'Quark::Session' do
       end
 
       it "with specified endpoint" do
-        @session.endpoint.should == "https://#{@api_domain}/v1"
+        @session.endpoint.should == "http://#{@api_domain}/v1"
       end
     end
 
