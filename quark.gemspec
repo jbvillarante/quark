@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{quark}
-  s.version = "0.3.16"
+  s.version = "0.3.17"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Anna Marseille D. Gabutero <agabutero@friendster.com>", "Andro Salinas <asalinas@friendster.com>", "Zander Magtipon <amagtipon@friendster.com>", "Arzumy MD <arzumy@mol.com>", "Arnold Putong <aputong@friendster.com>", "Paolo Alexis Falcone <pfalcone@friendster.com>"]
-  s.date = %q{2011-04-19}
+  s.authors = [%q{Anna Marseille D. Gabutero <agabutero@friendster.com>}, %q{Andro Salinas <asalinas@friendster.com>}, %q{Zander Magtipon <amagtipon@friendster.com>}, %q{Arzumy MD <arzumy@mol.com>}, %q{Arnold Putong <aputong@friendster.com>}, %q{Paolo Alexis Falcone <pfalcone@friendster.com>}]
+  s.date = %q{2011-07-08}
   s.description = %q{Quark encapsulates Friendster API v1 for Project Neutron.}
   s.email = %q{release@friendster.com}
   s.extra_rdoc_files = [
@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
     "lib/quark/request.rb",
     "lib/quark/session.rb",
     "lib/quark/util.rb",
+    "quark-0.3.16.gem",
     "quark.gemspec",
     "spec/data/albums_response_valid.json",
     "spec/data/friends_response_valid.json",
@@ -41,6 +42,8 @@ Gem::Specification.new do |s|
     "spec/data/photos_response_empty.json",
     "spec/data/photos_response_no_album_id.json",
     "spec/data/photos_response_valid.json",
+    "spec/data/post_notification_valid.json",
+    "spec/data/post_notification_valid.xml",
     "spec/data/post_shoutout_valid.json",
     "spec/data/post_shoutout_valid.xml",
     "spec/data/primary_photo_response_valid.json",
@@ -65,9 +68,9 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://github.com/friendster/quark}
-  s.licenses = ["Proprietary"]
-  s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.7.2}
+  s.licenses = [%q{Proprietary}]
+  s.require_paths = [%q{lib}]
+  s.rubygems_version = %q{1.8.5}
   s.summary = %q{Friendster v1 API wrapper}
   s.test_files = [
     "spec/quark/client_spec.rb",
@@ -84,6 +87,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<curb>, ["= 0.7.10"])
       s.add_runtime_dependency(%q<json>, [">= 1.4.6"])
       s.add_runtime_dependency(%q<nokogiri>, [">= 1.4.4"])
+      s.add_runtime_dependency(%q<rake>, ["= 0.8.7"])
       s.add_development_dependency(%q<rspec>, [">= 2.4.0"])
       s.add_development_dependency(%q<jeweler>, [">= 1.5.2"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
@@ -92,6 +96,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<curb>, ["= 0.7.10"])
       s.add_dependency(%q<json>, [">= 1.4.6"])
       s.add_dependency(%q<nokogiri>, [">= 1.4.4"])
+      s.add_dependency(%q<rake>, ["= 0.8.7"])
       s.add_dependency(%q<rspec>, [">= 2.4.0"])
       s.add_dependency(%q<jeweler>, [">= 1.5.2"])
       s.add_dependency(%q<rcov>, [">= 0"])
@@ -101,6 +106,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<curb>, ["= 0.7.10"])
     s.add_dependency(%q<json>, [">= 1.4.6"])
     s.add_dependency(%q<nokogiri>, [">= 1.4.4"])
+    s.add_dependency(%q<rake>, ["= 0.8.7"])
     s.add_dependency(%q<rspec>, [">= 2.4.0"])
     s.add_dependency(%q<jeweler>, [">= 1.5.2"])
     s.add_dependency(%q<rcov>, [">= 0"])

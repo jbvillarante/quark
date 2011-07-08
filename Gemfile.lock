@@ -34,6 +34,7 @@ DEPENDENCIES
   jeweler (>= 1.5.2)
   json (>= 1.4.6)
   nokogiri (>= 1.4.4)
+  rake (= 0.8.7)
   rcov
   rspec (>= 2.4.0)
   webmock (= 1.6.2)

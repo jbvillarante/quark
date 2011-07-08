@@ -4,6 +4,7 @@ source "http://rubygems.org"
 gem "curb", "0.7.10"
 gem "json", '>= 1.4.6'
 gem 'nokogiri', '>= 1.4.4'
+gem 'rake', '0.8.7' 
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
