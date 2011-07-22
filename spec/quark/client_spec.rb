@@ -33,20 +33,6 @@ describe 'Quark::Client' do
     client.get_token.should == '840d82214118f22.88053767'
   end
 
-  specify 'can log in with a user email and password using a trusted API key' do
-    stub_request(:post, %r{/token}).with(:data => { :format => 'json' }).to_return(:body => test_data('token_response_valid.json'))
-    stub_request(:post, %r{/login}).with(:data => { :format => 'json' }).to_return(:body => test_data('login_response_valid.json'))
-    
-    uid = '43169473'
-    email = 'fake@gmail.com'
-    password = 'fake'
-    
-    client = Quark::Client.new(:api_key => @api_key, :api_secret => @api_secret)
-    session = client.login(email, password)
-    session.session_key.should == 'Peni5ks8UkrpLayjuhpXy53EoiyCZ0zG-43169473'
-    session.uid.should == uid
-  end
-
   describe '#create_session' do
     let(:session_key) { 'foo' }
     let(:uid) { 18236912940 }
@@ -76,7 +62,7 @@ describe 'Quark::Client' do
     end
 
     specify 'should raise a helpful error if auth_token parameter is nil' do
+      pending
     end
   end
-  
 end

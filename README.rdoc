@@ -14,33 +14,7 @@ There are two ways to install Quark:
 
 === Establishing a Session
 
-There are three ways to obtain a valid session key:
-
-==== Using an Authenticated Token
-
-First, request a token:
-
-  client = Quark::Client.new(:api_key => your_api_key, :api_secret => your_api_secret)
-  token = client.get_token
-
-You must authenticate this token with valid user credentials before you can use
-it to create a session.  To perform the validation, redirect the user to
-Friendster's widget login page:
-
-  http://www.friendster.com/widget_login.php?api_key=your_api_key&auth_token=your_token
-
-Once the user logs in, Friendster authenticates the token, binds it to the
-logged in user ID, and redirects back to your application's callback URL.  You
-can now use the token to obtain a session:
-
-  session = client.create_session_from_token(your_token)
-
-==== Using the +login+ API
-
-Trusted applications can invoke the +login+ API with valid user credentials.
-
-  client = Quark::Client.new(:api_key => your_api_key, :api_secret => your_api_secret)
-  session = client.login(user_email, user_password)
+How to obtain a valid session key:
 
 ==== Canvas Page
 
@@ -163,21 +137,21 @@ You can call APIs directly and access the raw response by specifying the +resour
 
 The snippet below is similar with Quark::Session#user that retrieves user information BUT returns the unparsed response.
   response = session.get(:resource => 'user')
-  => #<Typhoeus::Response:0x123456a>
+  => #<Curl::Easy http://www.friendster.com/v1/user?api_key=718fb3449>
 
 For convenience, Quark uses JSON format by default, but you can also specify XML format.
 
   response = session.get(:resource => 'user', :params => {:format => 'json'})
-  => #<Typhoeus::Response:0x123456b>
+  => #<Curl::Easy http://www.friendster.com/v1/user?api_key=718fb3449>
   JSON.parse(response.body)
   response = session.get(:resource => 'user', :params => {:format => 'xml'})
-  => #<Typhoeus::Response:0x123456c>
+  => #<Curl::Easy http://www.friendster.com/v1/user?api_key=718fb3449>
   Nokogiri::XML(response.body)
 
 You can pass as many +params+ as needed, depending on the +resource+ you use.
 
   response = session.get(:resource => 'photos', :params => {:aid => '22222', :format => 'xml'})
-  => #<Typhoeus::Response:0x123456d>
+  => #<Curl::Easy http://www.friendster.com/v1/user?api_key=718fb3449>
 
 == Copyright
 

@@ -37,7 +37,6 @@ Gem::Specification.new do |s|
     "quark.gemspec",
     "spec/data/albums_response_valid.json",
     "spec/data/friends_response_valid.json",
-    "spec/data/login_response_valid.json",
     "spec/data/photo_response_valid.json",
     "spec/data/photos_response_empty.json",
     "spec/data/photos_response_no_album_id.json",
